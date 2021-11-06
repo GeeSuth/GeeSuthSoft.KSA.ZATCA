@@ -5,6 +5,8 @@ this Repo will be have a tools to help programmers to new requirements from ZATC
 ### Qr Code 
 
 #### Use :
+Install `Install-Package GeeSuthSoft.KSA.ZATCA -Version 1.0.0`
+
 after add `GeeSuthSoft.KSA.ZATCA.dll` to your project
 
 call it `using GeeSuthSoft.KSA.ZATCA.Qr;`
