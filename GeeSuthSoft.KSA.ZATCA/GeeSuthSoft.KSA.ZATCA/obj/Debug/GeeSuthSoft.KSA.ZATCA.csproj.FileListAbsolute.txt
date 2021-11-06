@@ -1,0 +1,7 @@
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\bin\Debug\GeeSuthSoft.KSA.ZATCA.dll
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\bin\Debug\GeeSuthSoft.KSA.ZATCA.pdb
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\bin\Debug\QRCoder.dll
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\obj\Debug\GeeSuthSoft.KSA.ZATCA.csproj.CoreCompileInputs.cache
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\obj\Debug\GeeSuthSoft.KSA.ZATCA.csproj.CopyComplete
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\obj\Debug\GeeSuthSoft.KSA.ZATCA.dll
+E:\Windows Application\2021\ZATCA\Requirements\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\GeeSuthSoft.KSA.ZATCA\obj\Debug\GeeSuthSoft.KSA.ZATCA.pdb
