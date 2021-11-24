@@ -10,6 +10,10 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 {
     public class QrCodeOption
     {
+        public QrCodeOption()
+        {
+            this.Language = Language.En;
+        }
         public Language Language = Enums.Options.Language.Ar;
 
         public string PointsColor { get; set; } = "#15463F";

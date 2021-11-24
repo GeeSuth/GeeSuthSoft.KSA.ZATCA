@@ -49,10 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Options.cs" />
+    <Compile Include="Models\QrContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qr\QrCodeGenerate.cs" />
     <Compile Include="Qr\QrCodeOption.cs" />
     <Compile Include="Qr\QrHelper.cs" />
+    <Compile Include="TLV\Tag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

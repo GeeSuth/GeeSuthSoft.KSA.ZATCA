@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QRCoder;
+using GeeSuthSoft.KSA.ZATCA.Qr;
 
 namespace GeeSuthSoft.KSA.ZATCA.Qr
 {
@@ -14,19 +15,25 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 
         #region Based Method
 
-        private static string Generate(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string AddsString="")
+
+
+        private static string Generate(string ContentTlv, QrCodeOption option = null, string AddsString = "")
         {
-            string Content = QrHelper.GetContentForQr(option.Language, sellerName, vatRegisterId, time, vatTotal, TotalInvoice,AddsString);
+
+            var data = Encoding.UTF8.GetBytes(ContentTlv);
+
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(Content, QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(
+                Convert.ToBase64String(data)
+                , QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             var qrCodeImage = new object();
-            if(option.CenterImage == null)
+            if (option.CenterImage == null)
             {
-                 qrCodeImage = qrCode.GetGraphic(20,
-                option.PointsColor,
-                option.BackgroundColor,
-                option.DrawQuietZones);
+                qrCodeImage = qrCode.GetGraphic(20,
+               option.PointsColor,
+               option.BackgroundColor,
+               option.DrawQuietZones);
             }
             else
             {
@@ -51,6 +58,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         }
 
 
+
+ 
+
         #endregion
 
 
@@ -65,10 +75,16 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
         /// <param name="Note"> if you like to add some note </param>
         /// <returns> QrCode In base64 </returns>
-        public static string GetBase64(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note="")
+        public static string GetBase64(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
         {
-            return Generate(sellerName, vatRegisterId, time, vatTotal, TotalInvoice, option,Note);
+
+            return Generate(QrHelper.GenerateTLV(new Models.QrContent(
+                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                )),option);
         }
+
+
+
 
 
         /// <summary>
@@ -82,9 +98,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
         /// <param name="Note"> if you like to add some note </param>
         /// <returns> data:image/png;base64,string </returns>
-        public static string GetBase64InUrl(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null,string Note= "")
+        public static string GetBase64InUrl(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
         {
-            return "data:image/png;base64," + Generate(sellerName, vatRegisterId, time, vatTotal, TotalInvoice, option,Note);
+            return "data:image/png;base64," + Generate(QrHelper.GenerateTLV(new Models.QrContent(
+                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                )), option);
         }
 
 
@@ -101,11 +119,43 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
         /// <param name="Note"> if you like to add some note </param>
         /// <returns> Image Object </returns>
-        public static Image GetImage(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice,QrCodeOption option = null, string Note = "")
+        public static Image GetImage(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
         {
             return (Bitmap)new ImageConverter().ConvertFrom(Convert.FromBase64String(
-                Generate(sellerName, vatRegisterId, time, vatTotal, TotalInvoice, option, Note)
+                Generate(QrHelper.GenerateTLV(new Models.QrContent(
+                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                )), option)
                 ));
         }
+
+
+
+
+        /// <summary>
+        /// Get The TLV data To check this diectly with ZATCA tools 
+        /// </summary>
+        /// <param name="sellerName"> Seller Name  </param>
+        /// <param name="vatRegisterId"> Vat No </param>
+        /// <param name="time"> recipt Date </param>
+        /// <param name="vatTotal"> total vat amount  </param>
+        /// <param name="TotalInvoice"> total amount  </param>
+        /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
+        /// <param name="Note"> if you like to add some note </param>
+        /// <returns> QrCode In base64 </returns>
+        public static string GetTLVString(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
+        {
+            var data = Encoding.UTF8.GetBytes(QrHelper.GenerateTLV(new Models.QrContent(
+                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                )));
+
+            return Convert.ToBase64String(data);
+        }
+
+
+
+
+
+
+
     }
 }
