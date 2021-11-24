@@ -1,28 +1,23 @@
 # GeeSuthSoft.KSA.ZATCA
 this Repo will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia 
 
--until now This is unofficial from ZATCA-
+
 
 ### Qr Code 
 
 #### Use :
+
 Install `Install-Package GeeSuthSoft.KSA.ZATCA -Version 1.0.0`
 
 after add `GeeSuthSoft.KSA.ZATCA.dll` to your project
 
 call it `using GeeSuthSoft.KSA.ZATCA.Qr;`
 
-`var qr= QrCodeGenerate.GetBase64InUrl("salem", "1111111111100555", DateTime.Now, 15, 230, new QrCodeOption()
-            {
-                Language = GeeSuthSoft.KSA.ZATCA.Enums.Options.Language.Ar,
-                CenterImage = (Bitmap)Bitmap.FromFile("C:\\vat.jpg")
-            }
-            )`
-            
- 
- the result will be like 
- 
- ![image](https://user-images.githubusercontent.com/10328974/140614818-8bf54479-ecb1-45ba-a501-a3aa5620f844.png)
+the result of checking Qrcode(Generated from this Library) by [ZATCA](https://zatca.gov.sa/en/E-Invoicing/SystemsDevelopers/ComplianceEnablementToolbox/Pages/DownloadSDK.aspx)
+
+![image](https://user-images.githubusercontent.com/10328974/143316390-370ed783-7ec1-4d0e-b4ae-fbb1abb0fcbf.png)
+
+As like what you see, we can say this working very well
 
 
 ##### Methods:
