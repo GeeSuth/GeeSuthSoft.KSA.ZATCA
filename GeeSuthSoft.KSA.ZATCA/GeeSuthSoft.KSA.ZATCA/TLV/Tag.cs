@@ -9,12 +9,14 @@ namespace GeeSuthSoft.KSA.ZATCA.TLV
     public class Tag
     {
         private int _tag;
-        private string _value;
+        private byte[] _value;
 
-        public Tag(int tag, string value)
+        public Tag(int tag, byte[] value)
         {
             _tag = tag;
             _value = value;
+
+
         }
 
         private int GetTag()
@@ -22,7 +24,7 @@ namespace GeeSuthSoft.KSA.ZATCA.TLV
             return this._tag;
         }
 
-        private string GetValue()
+        private byte[] GetValue()
         {
             return this._value;
         }
@@ -34,14 +36,12 @@ namespace GeeSuthSoft.KSA.ZATCA.TLV
 
         private string ToHexDecimal(int value)
         {
-            //return value.ToString("%02X");
-
-            String hex = String.Format("{0:X2}", value);
-            String input = hex.Length % 2 == 0 ? hex : hex + "0";
+            string hex = string.Format("{0:X2}", value);
+            string input = hex.Length % 2 == 0 ? hex : hex + "0";
             StringBuilder output = new StringBuilder();
             for (int i = 0; i < input.Length; i += 2)
             {
-                String str = input.Substring(i, i + 2);
+                string str = input.Substring(i, i + 2);
                 output.Append((char)int.Parse(str, System.Globalization.NumberStyles.HexNumber));
             }
             return output.ToString();
@@ -49,14 +49,10 @@ namespace GeeSuthSoft.KSA.ZATCA.TLV
 
         public override string ToString()
         {
-            
-
-            var data = this.ToHexDecimal
-                (this.GetTag()) +
-                this.ToHexDecimal(this.GetLength()) +
-                (this.GetValue());
-
-            return data; 
+            return string.Join("",
+                this.ToHexDecimal(this.GetTag()),
+                this.ToHexDecimal(this.GetLength()),
+                Encoding.UTF8.GetString(this.GetValue()));
         }
 
     }

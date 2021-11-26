@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.Models
 {
+
     public class QrContent
     {
         public QrContent(string SellerName,
@@ -15,11 +16,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Models
                          decimal TotalAmount,
                          decimal TotalTaxAmount)
         {
-            this.SellerName = new Tag(1, SellerName);
-            this.VatNo = new Tag(2, VatNo);
-            this.Timespan = new Tag(3, TimeRecipt.ToString("yyyy-MM-dd hh:mm:ss"));
-            this.TotalInvoice = new Tag(4, TotalAmount.ToString());
-            this.TotalTaxAmount = new Tag(5, TotalTaxAmount.ToString());
+            this.SellerName = new Tag(1, Encoding.UTF8.GetBytes(SellerName));
+            this.VatNo = new Tag(2, Encoding.UTF8.GetBytes(VatNo));
+            this.Timespan = new Tag(3, Encoding.UTF8.GetBytes(TimeRecipt.ToString()));
+            this.TotalInvoice = new Tag(4, Encoding.UTF8.GetBytes(TotalAmount.ToString()));
+            this.TotalTaxAmount = new Tag(5, Encoding.UTF8.GetBytes(TotalTaxAmount.ToString()));
 
         }
         public Tag SellerName { get; set; }

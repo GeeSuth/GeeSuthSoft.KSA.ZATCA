@@ -17,14 +17,16 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 
 
 
-        private static string Generate(string ContentTlv, QrCodeOption option = null, string AddsString = "")
+        private static string Generate(string ContentTlvInBase64, QrCodeOption option = null, string AddsString = "")
         {
 
-            var data = Encoding.UTF8.GetBytes(ContentTlv);
+           
+
+            
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(
-                Convert.ToBase64String(data)
+                ContentTlvInBase64
                 , QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             var qrCodeImage = new object();
@@ -59,10 +61,12 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 
 
 
- 
+
 
         #endregion
 
+
+        #region General
 
         /// <summary>
         /// Get QrCode  in Base64 string to use
@@ -80,10 +84,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 
             return Generate(QrHelper.GenerateTLV(new Models.QrContent(
                 sellerName, vatRegisterId, time, vatTotal, TotalInvoice
-                )),option);
+                )), option);
         }
-
-
 
 
 
@@ -144,15 +146,16 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         /// <returns> QrCode In base64 </returns>
         public static string GetTLVString(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
         {
-            var data = Encoding.UTF8.GetBytes(QrHelper.GenerateTLV(new Models.QrContent(
-                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
-                )));
 
-            return Convert.ToBase64String(data);
+
+            return QrHelper.GenerateTLV(new Models.QrContent(
+                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                ));
         }
 
 
 
+        #endregion
 
 
 
