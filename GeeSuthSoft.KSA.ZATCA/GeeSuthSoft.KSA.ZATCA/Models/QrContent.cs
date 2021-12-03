@@ -13,21 +13,21 @@ namespace GeeSuthSoft.KSA.ZATCA.Models
         public QrContent(string SellerName,
                          string VatNo,
                          DateTime TimeRecipt,
-                         decimal TotalAmount,
-                         decimal TotalTaxAmount)
+                         decimal TotalInvoiceWithVat,
+                         decimal TotalVatAmount)
         {
             this.SellerName = new Tag(1, Encoding.UTF8.GetBytes(SellerName));
             this.VatNo = new Tag(2, Encoding.UTF8.GetBytes(VatNo));
             this.Timespan = new Tag(3, Encoding.UTF8.GetBytes(TimeRecipt.ToString()));
-            this.TotalInvoice = new Tag(4, Encoding.UTF8.GetBytes(TotalAmount.ToString()));
-            this.TotalTaxAmount = new Tag(5, Encoding.UTF8.GetBytes(TotalTaxAmount.ToString()));
+            this.TotalInvoiceWithVat = new Tag(4, Encoding.UTF8.GetBytes(TotalInvoiceWithVat.ToString()));
+            this.TotalVatAmount = new Tag(5, Encoding.UTF8.GetBytes(TotalVatAmount.ToString()));
 
         }
         public Tag SellerName { get; set; }
         public Tag VatNo { get; set; }
         public Tag Timespan { get; set; }
-        public Tag TotalInvoice { get; set; }
-        public Tag TotalTaxAmount { get; set; }
+        public Tag TotalInvoiceWithVat { get; set; }
+        public Tag TotalVatAmount { get; set; }
 
     }
 }

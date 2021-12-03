@@ -20,8 +20,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
                 content.SellerName.ToString(), 
                 content.VatNo.ToString(), 
                 content.Timespan.ToString(),
-                content.TotalInvoice.ToString(),
-                content.TotalTaxAmount.ToString());
+                content.TotalInvoiceWithVat.ToString(),
+                content.TotalVatAmount.ToString());
             
             var data = Encoding.UTF8.GetBytes(ContentTlv);
             return Convert.ToBase64String(data);

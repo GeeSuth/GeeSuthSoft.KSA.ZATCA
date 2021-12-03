@@ -83,7 +83,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         {
 
             return Generate(QrHelper.GenerateTLV(new Models.QrContent(
-                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                SellerName: sellerName,
+                VatNo: vatRegisterId,
+                TimeRecipt: time,
+                TotalVatAmount: vatTotal,
+                TotalInvoiceWithVat: TotalInvoice
                 )), option);
         }
 
@@ -103,7 +107,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         public static string GetBase64InUrl(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
         {
             return "data:image/png;base64," + Generate(QrHelper.GenerateTLV(new Models.QrContent(
-                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                SellerName: sellerName,
+                VatNo: vatRegisterId,
+                TimeRecipt: time,
+                TotalVatAmount: vatTotal,
+                TotalInvoiceWithVat: TotalInvoice
                 )), option);
         }
 
@@ -125,7 +133,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         {
             return (Bitmap)new ImageConverter().ConvertFrom(Convert.FromBase64String(
                 Generate(QrHelper.GenerateTLV(new Models.QrContent(
-                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                SellerName: sellerName,
+                VatNo: vatRegisterId,
+                TimeRecipt: time,
+                TotalVatAmount: vatTotal,
+                TotalInvoiceWithVat: TotalInvoice
                 )), option)
                 ));
         }
@@ -149,7 +161,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 
 
             return QrHelper.GenerateTLV(new Models.QrContent(
-                sellerName, vatRegisterId, time, vatTotal, TotalInvoice
+                SellerName: sellerName,
+                VatNo: vatRegisterId, 
+                TimeRecipt: time,
+                TotalVatAmount: vatTotal,
+                TotalInvoiceWithVat: TotalInvoice
                 ));
         }
 
