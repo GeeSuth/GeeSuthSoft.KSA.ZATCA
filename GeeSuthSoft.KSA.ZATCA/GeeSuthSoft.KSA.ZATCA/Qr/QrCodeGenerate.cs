@@ -30,22 +30,29 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
                 , QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             var qrCodeImage = new object();
-            if (option.CenterImage == null)
+            if (option != null)
             {
-                qrCodeImage = qrCode.GetGraphic(20,
-               option.PointsColor,
-               option.BackgroundColor,
-               option.DrawQuietZones);
+                if (option.CenterImage == null)
+                {
+                    qrCodeImage = qrCode.GetGraphic(20,
+                   option.PointsColor,
+                   option.BackgroundColor,
+                   option.DrawQuietZones);
+                }
+                else
+                {
+                    qrCodeImage = qrCode.GetGraphic(20,
+                    ColorTranslator.FromHtml(option.PointsColor),
+                    ColorTranslator.FromHtml(option.BackgroundColor),
+                    option.CenterImage,
+                    option.IconSizePercent,
+                    option.IconBorderWidth,
+                    option.DrawQuietZones);
+                }
             }
             else
             {
-                qrCodeImage = qrCode.GetGraphic(20,
-                ColorTranslator.FromHtml(option.PointsColor),
-                ColorTranslator.FromHtml(option.BackgroundColor),
-                option.CenterImage,
-                option.IconSizePercent,
-                option.IconBorderWidth,
-                option.DrawQuietZones);
+                qrCodeImage = qrCode.GetGraphic(20);
             }
             using (var ms = new MemoryStream())
             {

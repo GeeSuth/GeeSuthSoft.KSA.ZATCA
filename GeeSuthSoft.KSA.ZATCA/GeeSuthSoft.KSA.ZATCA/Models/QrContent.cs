@@ -17,10 +17,10 @@ namespace GeeSuthSoft.KSA.ZATCA.Models
                          decimal TotalVatAmount)
         {
             this.SellerName = new Tag(1, Encoding.UTF8.GetBytes(SellerName));
-            this.VatNo = new Tag(2, Encoding.UTF8.GetBytes(VatNo));
-            this.Timespan = new Tag(3, Encoding.UTF8.GetBytes(TimeRecipt.ToString()));
-            this.TotalInvoiceWithVat = new Tag(4, Encoding.UTF8.GetBytes(TotalInvoiceWithVat.ToString()));
-            this.TotalVatAmount = new Tag(5, Encoding.UTF8.GetBytes(TotalVatAmount.ToString()));
+            this.VatNo = new Tag(2, Encoding.Default.GetBytes(VatNo));
+            this.Timespan = new Tag(3, Encoding.Default.GetBytes(TimeRecipt.ToString()));
+            this.TotalInvoiceWithVat = new Tag(4, Encoding.Default.GetBytes(TotalInvoiceWithVat.ToString()));
+            this.TotalVatAmount = new Tag(5, Encoding.Default.GetBytes(TotalVatAmount.ToString()));
 
         }
         public Tag SellerName { get; set; }

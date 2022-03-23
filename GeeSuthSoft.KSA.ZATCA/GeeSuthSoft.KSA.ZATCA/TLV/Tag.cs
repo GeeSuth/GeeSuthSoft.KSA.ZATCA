@@ -49,10 +49,15 @@ namespace GeeSuthSoft.KSA.ZATCA.TLV
 
         public override string ToString()
         {
+            //return string.Join("",
+            //    this.ToHexDecimal(this.GetTag()),
+            //    this.ToHexDecimal(this.GetLength()),
+            //    Encoding.UTF8.GetString(this.GetValue()));
+
             return string.Join("",
-                this.ToHexDecimal(this.GetTag()),
-                this.ToHexDecimal(this.GetLength()),
-                Encoding.UTF8.GetString(this.GetValue()));
+               this.ToHexDecimal(this.GetTag()),
+               this.ToHexDecimal(this.GetLength()),
+               this.GetValue().ToString());
         }
 
     }

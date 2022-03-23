@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeeSuthSoft.KSA.ZATCA", "Ge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeeSuthSoft.KSA.ZATCA.UnitTest", "GeeSuthSoft.KSA.ZATCA.UnitTest\GeeSuthSoft.KSA.ZATCA.UnitTest.csproj", "{4AC0225A-93BF-4E0C-A674-FA800007699F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeeSuthSoft.KSA.ZATCA.WinForm", "GeeSuthSoft.KSA.ZATCA.WinForm\GeeSuthSoft.KSA.ZATCA.WinForm.csproj", "{5A5A4AFD-AD85-4948-9628-3F28FA6C436A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4AC0225A-93BF-4E0C-A674-FA800007699F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AC0225A-93BF-4E0C-A674-FA800007699F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AC0225A-93BF-4E0C-A674-FA800007699F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A5A4AFD-AD85-4948-9628-3F28FA6C436A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A5A4AFD-AD85-4948-9628-3F28FA6C436A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A5A4AFD-AD85-4948-9628-3F28FA6C436A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A5A4AFD-AD85-4948-9628-3F28FA6C436A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
