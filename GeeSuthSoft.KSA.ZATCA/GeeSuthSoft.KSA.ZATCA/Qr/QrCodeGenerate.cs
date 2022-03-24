@@ -16,8 +16,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         #region Based Method
 
 
-
-        private static string Generate(string ContentTlvInBase64, QrCodeOption option = null, string AddsString = "")
+        public string Generate(string Base64, QrCodeOption option = null, string AddsString = "")
         {
 
            
@@ -26,7 +25,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(
-                ContentTlvInBase64
+                Base64
                 , QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             var qrCodeImage = new object();
@@ -67,118 +66,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         }
 
 
-
-
-
         #endregion
 
-
-        #region General
-
-        /// <summary>
-        /// Get QrCode  in Base64 string to use
-        /// </summary>
-        /// <param name="sellerName"> Seller Name  </param>
-        /// <param name="vatRegisterId"> Vat No </param>
-        /// <param name="time"> recipt Date </param>
-        /// <param name="vatTotal"> total vat amount  </param>
-        /// <param name="TotalInvoice"> total amount  </param>
-        /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
-        /// <param name="Note"> if you like to add some note </param>
-        /// <returns> QrCode In base64 </returns>
-        public static string GetBase64(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
-        {
-
-            return Generate(QrHelper.GenerateTLV(new Models.QrContent(
-                SellerName: sellerName,
-                VatNo: vatRegisterId,
-                TimeRecipt: time,
-                TotalVatAmount: vatTotal,
-                TotalInvoiceWithVat: TotalInvoice
-                )), option);
-        }
-
-
-
-        /// <summary>
-        /// Get QrCode  in Base64 string can be opened in browser just past result in url 
-        /// </summary>
-        /// <param name="sellerName"> Seller Name  </param>
-        /// <param name="vatRegisterId"> Vat No </param>
-        /// <param name="time"> recipt Date </param>
-        /// <param name="vatTotal"> total vat amount  </param>
-        /// <param name="TotalInvoice"> total amount  </param>
-        /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
-        /// <param name="Note"> if you like to add some note </param>
-        /// <returns> data:image/png;base64,string </returns>
-        public static string GetBase64InUrl(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
-        {
-            return "data:image/png;base64," + Generate(QrHelper.GenerateTLV(new Models.QrContent(
-                SellerName: sellerName,
-                VatNo: vatRegisterId,
-                TimeRecipt: time,
-                TotalVatAmount: vatTotal,
-                TotalInvoiceWithVat: TotalInvoice
-                )), option);
-        }
-
-
-
-
-        /// <summary>
-        /// Get QrCode In Image 
-        /// </summary>
-        /// <param name="sellerName"> Seller Name  </param>
-        /// <param name="vatRegisterId"> Vat No </param>
-        /// <param name="time"> recipt Date </param>
-        /// <param name="vatTotal"> total vat amount  </param>
-        /// <param name="TotalInvoice"> total amount  </param>
-        /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
-        /// <param name="Note"> if you like to add some note </param>
-        /// <returns> Image Object </returns>
-        public static Image GetImage(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
-        {
-            return (Bitmap)new ImageConverter().ConvertFrom(Convert.FromBase64String(
-                Generate(QrHelper.GenerateTLV(new Models.QrContent(
-                SellerName: sellerName,
-                VatNo: vatRegisterId,
-                TimeRecipt: time,
-                TotalVatAmount: vatTotal,
-                TotalInvoiceWithVat: TotalInvoice
-                )), option)
-                ));
-        }
-
-
-
-
-        /// <summary>
-        /// Get The TLV data To check this diectly with ZATCA tools 
-        /// </summary>
-        /// <param name="sellerName"> Seller Name  </param>
-        /// <param name="vatRegisterId"> Vat No </param>
-        /// <param name="time"> recipt Date </param>
-        /// <param name="vatTotal"> total vat amount  </param>
-        /// <param name="TotalInvoice"> total amount  </param>
-        /// <param name="option"> options to more Customizing Use QrCodeOption object to see what can be changed </param>
-        /// <param name="Note"> if you like to add some note </param>
-        /// <returns> QrCode In base64 </returns>
-        public static string GetTLVString(string sellerName, string vatRegisterId, DateTime time, decimal vatTotal, decimal TotalInvoice, QrCodeOption option = null, string Note = "")
-        {
-
-
-            return QrHelper.GenerateTLV(new Models.QrContent(
-                SellerName: sellerName,
-                VatNo: vatRegisterId, 
-                TimeRecipt: time,
-                TotalVatAmount: vatTotal,
-                TotalInvoiceWithVat: TotalInvoice
-                ));
-        }
-
-
-
-        #endregion
 
 
 

@@ -25,7 +25,7 @@ namespace GeeSuthSoft.KSA.ZATCA.UnitTest
         [TestMethod]
         public void TestGetBase64()
         {
-            var test = Qr.QrCodeGenerate.GetBase64(vName, "1201010101110", DateTime.Now, decimal.Parse("186.45"), decimal.Parse("1429.4500"), new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
+            var test = Qr.Qr.GetBase64(vName, "1201010101110", DateTime.Now, decimal.Parse("186.45"), decimal.Parse("1429.4500"), new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
 
             TestContext.WriteLine(test);
             Assert.IsNotNull(test);
@@ -38,7 +38,7 @@ namespace GeeSuthSoft.KSA.ZATCA.UnitTest
         [TestMethod]
         public void TestGetBase64InUrl()
         {
-            var test = Qr.QrCodeGenerate.GetBase64InUrl(vName, "120101010111012", DateTime.Now, decimal.Parse("186.45"), decimal.Parse("1429.45"), new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
+            var test = Qr.Qr.GetBase64InUrl(vName, "120101010111012", DateTime.Now, decimal.Parse("186.45"), decimal.Parse("1429.45"), new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
 
 
             TestContext.WriteLine(test);
@@ -52,7 +52,7 @@ namespace GeeSuthSoft.KSA.ZATCA.UnitTest
         [TestMethod]
         public void TestGetImage()
         {
-            var test = Qr.QrCodeGenerate.GetImage(vName, "1201010101110", DateTime.Now, decimal.Parse("186.45"), decimal.Parse("1429.4500"), new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
+            var test = Qr.Qr.GetImage(vName, "1201010101110", DateTime.Now, decimal.Parse("186.45"), decimal.Parse("1429.4500"), new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
 
 
             TestContext.WriteLine(test.Size.ToString());
@@ -62,16 +62,7 @@ namespace GeeSuthSoft.KSA.ZATCA.UnitTest
         }
 
 
-        [TestMethod]
-        public void TestTLV()
-        {
-            var test = Qr.QrCodeGenerate.GetTLVString(vName, "123456789123456", DateTime.Now, 15, 115, new Qr.QrCodeOption() { Language = Enums.Options.Language.Ar });
-
-            TestContext.WriteLine(test);
-            Assert.IsNotNull(test);
-
-
-        }
+    
 
     }
 }
