@@ -28,3 +28,6 @@ As like what you see, we can say this working very well
 `GetImage()` => 'Get QrCode In Image object'
 
 
+### Result of ZATCA app :
+![image](https://user-images.githubusercontent.com/10328974/159871332-c874d078-9cc2-47a9-9d10-08831702fefe.png)
+
