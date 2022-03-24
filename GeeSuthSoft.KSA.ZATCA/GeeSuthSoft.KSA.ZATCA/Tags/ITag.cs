@@ -17,23 +17,27 @@ namespace GeeSuthSoft.KSA.ZATCA.Tags
             this.value = value;
         }
 
-        private int GetLength()
+        private string GetLength()
         {
-            return this.value.Length;
+            if (Regex.IsMatch(this.value, @"\p{IsArabic}"))
+            {
+                //The Space Should not increase * 2 only Arabic Char 
+                /*
+                 1- I remove spaces because spaces is not arabic char
+                 2- Count Arabic char only used regex and increase it * 2 
+                 3- So I need to get count of space to add count to lenght but not increased 
+                */
+                return (Regex.Matches(this.value.Replace(" ",""), @"[ء-ي]").Count * 2+(this.value.Count(Char.IsWhiteSpace))).ToString("X2");
+                
+            }
+
+            return this.value.Length.ToString("X2");
         }
 
         public override string ToString()
         {
-            
-            if (Regex.IsMatch(this.value, @"\p{IsArabic}"))
-            {
-                //Is Arabic Language , need to increase char 
-                return $"{TagIndex.ToString("X2")}{(GetLength()*2).ToString("X2")}{ToHex(this.value)}";
-            }
-            else
-            {
-                return $"{TagIndex.ToString("X2")}{GetLength().ToString("X2")}{ToHex(this.value)}";
-            }
+
+           return $"{TagIndex.ToString("X2")}{GetLength()}{ToHex(this.value)}";
 
         }
 

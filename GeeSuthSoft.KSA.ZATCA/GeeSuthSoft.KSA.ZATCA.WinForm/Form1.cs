@@ -20,7 +20,7 @@ namespace GeeSuthSoft.KSA.ZATCA.WinForm
 
         private void btn_show_Click(object sender, EventArgs e)
         {
-            var QrImage = ZATCA.Qr.Qr.GetImage("احمد", "0000000000009", new DateTime(2022, 1, 1), 15, 115);
+            var QrImage = ZATCA.Qr.Qr.GetImage("بسم الله الرحمن الرحيم", "0000000000009", new DateTime(2022, 1, 1), 15, 115);
             pic_new.Image = QrImage;
 
 
