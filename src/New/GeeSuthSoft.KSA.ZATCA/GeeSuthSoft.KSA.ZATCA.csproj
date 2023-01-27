@@ -4,6 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/GeeSuth/GeeSuthSoft.KSA.ZATCA</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GeeSuth/GeeSuthSoft.KSA.ZATCA</RepositoryUrl>
+    <AssemblyVersion>7.0</AssemblyVersion>
+	<GeneratedAssemblyInfoFile>assemblyinfo.cs</GeneratedAssemblyInfoFile>
+	<FileVersion>7.0</FileVersion>
+	<Version>7.0</Version>
+	<Title>KSA ZATCA</Title>
   </PropertyGroup>
 
   <ItemGroup>
