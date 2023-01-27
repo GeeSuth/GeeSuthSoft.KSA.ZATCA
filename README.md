@@ -1,5 +1,6 @@
 # GeeSuthSoft.KSA.ZATCA
-This Repo will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia 
+This Repository will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia 
+support .NET 7
 
 
 
