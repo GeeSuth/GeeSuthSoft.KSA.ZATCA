@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeeSuthSoft.KSA.ZATCA.Enums;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static GeeSuthSoft.KSA.ZATCA.Enums.Options;
 
-namespace GeeSuthSoft.KSA.ZATCA.Qr
+namespace GeeSuthSoft.KSA.ZATCA.QR
 {
     public class QrCodeOption
     {
@@ -20,7 +21,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Qr
         public string BackgroundColor { get; set; } = "#FFFFFF";
         public bool DrawQuietZones { get; set; } = true;
 
-        public Bitmap CenterImage { get; set; }
+        public Bitmap? CenterImage { get; set; }
         public int IconSizePercent { get; set; } = 30;
         public int IconBorderWidth { get; set; } = 6;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeeSuthSoft.KSA.ZATCA.Ext
+namespace GeeSuthSoft.KSA.ZATCA.Extensions
 {
     public static class HexExtasion
     {
