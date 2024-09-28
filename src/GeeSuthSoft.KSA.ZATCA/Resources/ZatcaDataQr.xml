@@ -1,0 +1,6 @@
+<cac:AdditionalDocumentReference>
+        <cbc:ID>QR</cbc:ID>
+        <cac:Attachment>
+            <cbc:EmbeddedDocumentBinaryObject mimeCode="text/plain">TLV_QRCODE_STRING</cbc:EmbeddedDocumentBinaryObject>
+        </cac:Attachment>
+</cac:AdditionalDocumentReference>

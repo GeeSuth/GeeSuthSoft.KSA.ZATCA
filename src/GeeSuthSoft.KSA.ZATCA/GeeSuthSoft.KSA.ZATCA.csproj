@@ -7,8 +7,38 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ZatcaDataQr.xml" />
+    <None Remove="Resources\ZatcaDataSignature.xml" />
+    <None Remove="Resources\ZatcaDataUbl.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ZatcaDataQr.xml" />
+    <EmbeddedResource Include="Resources\ZatcaDataSignature.xml" />
+    <EmbeddedResource Include="Resources\ZatcaDataUbl.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="QRCoder" Version="1.4.2" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
