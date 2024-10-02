@@ -25,6 +25,9 @@
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
   </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="GeeSuthSoft.KSA.ZATCA.XunitTest"/>
+	</ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
