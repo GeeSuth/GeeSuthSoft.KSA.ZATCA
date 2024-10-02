@@ -1,80 +1,86 @@
 ﻿using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Net.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services
 {
-    public class ZatcaInvoiceService
+
+    public class ZatcaInvoiceService : IZatcaInvoiceService
     {
-        private const string ComplianceCheckUrl = "https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/compliance/invoices";
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<ZatcaInvoiceService> _logger;
+        private readonly IZatcaApiConfig _zatcaApiConfig;
 
-
-        public async Task<ServerResult> ComplianceCheck(string ccsidBinaryToken, 
-            string ccsidSecret, 
-            ZatcaRequestApi requestApi)
+        public ZatcaInvoiceService(IHttpClientFactory httpClientFactory,
+                                   ILogger<ZatcaInvoiceService> logger,
+                                   IZatcaApiConfig zatcaApiConfig)
         {
-            using (var _httpClient = new HttpClient())
-            {
-                try
-                {
-                    _httpClient.DefaultRequestHeaders.Clear();
-                    _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    _httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
-                    _httpClient.DefaultRequestHeaders.Add("Accept-Version", "V2");
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                        Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ccsidBinaryToken}:{ccsidSecret}")));
-
-                    var content = new StringContent(JsonConvert.SerializeObject(requestApi), Encoding.UTF8, "application/json");
-
-                    var response = await _httpClient.PostAsync(ComplianceCheckUrl, content);
-                    response.EnsureSuccessStatusCode();
-
-                    var resultContent = await response.Content.ReadAsStringAsync();
-                    var serverResult = JsonConvert.DeserializeObject<ServerResult>(resultContent);
-
-                    return serverResult;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error during compliance check: {ex.Message}");
-                    throw;
-                }
-            }
-
-          
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _zatcaApiConfig = zatcaApiConfig ?? throw new ArgumentNullException(nameof(zatcaApiConfig));
         }
 
+  public async Task<ServerResult> ComplianceCheck(string ccsidBinaryToken, string ccsidSecret, ZatcaRequestApi requestApi)
+        {
+            var client = _httpClientFactory.CreateClient();
+            ConfigureHttpClient(client, ccsidBinaryToken, ccsidSecret);
+
+            var content = new StringContent(JsonConvert.SerializeObject(requestApi), Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await client.PostAsync(_zatcaApiConfig.ComplianceCheckUrl, content);
+                response.EnsureSuccessStatusCode();
+
+                var resultContent = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ServerResult>(resultContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during compliance check");
+                throw;
+            }
+        }
 
         public async Task<HttpResponseMessage> SendInvoiceToZatcaApi(ZatcaRequestApi zatcaRequestApi,
-                 string PCSIDBinaryToken,
-                 string PCSIDSecret,
-                 bool IsClearance)
+            string pcsidBinaryToken, string pcsidSecret, bool isClearance)
         {
-            // TODO: OtherHelper needs to improving should not working like that, Just for test
-            OtherHelper otherHelper = new OtherHelper();
+           try {
+            var client = _httpClientFactory.CreateClient();
+            ConfigureHttpClient(client, pcsidBinaryToken, pcsidSecret, isClearance);
 
-            using (var _httpClient = new HttpClient())
-            {
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                _httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
-                _httpClient.DefaultRequestHeaders.Add("Clearance-Status", IsClearance ? "1" : "0");
-                _httpClient.DefaultRequestHeaders.Add("Accept-Version", "V2");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", 
-                    Convert.ToBase64String(Encoding.ASCII.GetBytes($"{PCSIDBinaryToken}:{PCSIDSecret}")));
+            var content = new StringContent(JsonConvert.SerializeObject(zatcaRequestApi), Encoding.UTF8, "application/json");
 
-                var jsonContent = JsonConvert.SerializeObject(zatcaRequestApi);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                var url = IsClearance ? otherHelper.ClearanceUrl : otherHelper.ReportingUrl;
-
-                return await _httpClient.PostAsync(url, content);
-            }
-
-            
+            var response = await client.PostAsync(_zatcaApiConfig.ReportingUrl, content);
+            response.EnsureSuccessStatusCode();
+            return response;
+           }
+           catch (Exception ex)
+           {
+            _logger.LogError(ex, "Error during compliance check");
+            throw;
+           }
         }
 
+        private void ConfigureHttpClient(HttpClient client, string binaryToken, string secret, bool? isClearance = null)
+        {
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
+            client.DefaultRequestHeaders.Add("Accept-Version", "V2");
+            
+            if (isClearance.HasValue)
+            {
+                client.DefaultRequestHeaders.Add("Clearance-Status", isClearance.Value ? "1" : "0");
+            }
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                Convert.ToBase64String(Encoding.ASCII.GetBytes($"{binaryToken}:{secret}")));
+        }
     }
 }

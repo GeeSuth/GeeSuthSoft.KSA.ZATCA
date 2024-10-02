@@ -3,6 +3,8 @@ using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Services;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,74 +15,53 @@ using System.Threading.Tasks;
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
     
-    public class OnboardingDeviceTest
+    public class OnboardingDeviceTest : IClassFixture<ServiceProviderFixture>
     {
+        private readonly IZatcaOnboardingService _zatcaOnboardingService;
+        private readonly IZatcaInvoiceService _zatcaInvoiceService;
 
-        [Fact]
-        public void Generate_Crs_Test()
+        public OnboardingDeviceTest(ServiceProviderFixture fixture)
         {
-
-            var onboardingResult = new OnboardingResultDto();
-
-
-            var csrGenerationDto = new CsrGenerationDto
-            {
-                CommonName = "TST-886431145-399999999900003",
-                SerialNumber = "1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f",
-                OrganizationIdentifier = "399999999900003",
-                OrganizationUnitName = "Riyadh Branch",
-                OrganizationName = "Maximum Speed Tech Supply LTD",
-                CountryName = "SA",
-                InvoiceType = "1100",
-                LocationAddress = "RRRD2929",
-                IndustryBusinessCategory = "Supply activities"
-            };
-
-            var csrGenerator = new GeneratorCsr();
-            var (generatedCsr, privateKey, errorMessages)
-                = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, EnvironmentType.NonProduction, false);
-
-
-            onboardingResult.GeneratedCsr = generatedCsr;
-            onboardingResult.PrivateKey = privateKey;
-
-
-            Assert.NotNull(onboardingResult.GeneratedCsr);
-            Assert.NotNull(onboardingResult.PrivateKey);
-
-            Assert.NotEmpty(onboardingResult.GeneratedCsr);
-            Assert.NotEmpty(onboardingResult.PrivateKey);
+            _zatcaOnboardingService = fixture.ServiceProvider.GetRequiredService<IZatcaOnboardingService>();
+            _zatcaInvoiceService = fixture.ServiceProvider.GetRequiredService<IZatcaInvoiceService>();
         }
 
+        [Fact]
+        public void Generate_Csr_Test()
+        {
+            // Arrange
+            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+
+            // Act
+            var result = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotNull(result.Csr);
+            Assert.NotNull(result.PrivateKey);
+            Assert.NotEmpty(result.Csr);
+            Assert.NotEmpty(result.PrivateKey);
+        }
 
         [Fact]
         public async Task Generate_Crs_And_GetCSID_Test()
         {
 
-            var onboardingResult = new OnboardingResultDto();
-
-
+            // Arrange
             var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
 
-            var csrGenerator = new GeneratorCsr();
-            var (generatedCsr, privateKey, errorMessages)
-                = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, EnvironmentType.NonProduction, false);
+            // Act
+            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
 
 
-            onboardingResult.GeneratedCsr = generatedCsr;
-            onboardingResult.PrivateKey = privateKey;
+            Assert.NotNull(CsrGenerationResultDto.Csr);
+            Assert.NotNull(CsrGenerationResultDto.PrivateKey);
+
+            Assert.NotEmpty(CsrGenerationResultDto.Csr);
+            Assert.NotEmpty(CsrGenerationResultDto.PrivateKey);
 
 
-            Assert.NotNull(onboardingResult.GeneratedCsr);
-            Assert.NotNull(onboardingResult.PrivateKey);
-
-            Assert.NotEmpty(onboardingResult.GeneratedCsr);
-            Assert.NotEmpty(onboardingResult.PrivateKey);
-
-
-            ZatcaOnboardingService api = new ZatcaOnboardingService();
-
-            var result = await api.GetCSIDAsync(onboardingResult.GeneratedCsr, "12345");
+            var result = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr, "12345");
 
             Assert.NotNull(result);
 
@@ -100,27 +81,26 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             //var onboardingResult = new OnboardingResultDto();
 
 
+            // Arrange
             var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
-            var csrGenerator = new GeneratorCsr();
+
+            // Act
+            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+
+
+            Assert.NotNull(CsrGenerationResultDto.Csr);
+            Assert.NotNull(CsrGenerationResultDto.PrivateKey);
+
+            Assert.NotEmpty(CsrGenerationResultDto.Csr);
+            Assert.NotEmpty(CsrGenerationResultDto.PrivateKey);
 
 
 
-            var (generatedCsr, privateKey, errorMessages)
-                = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, EnvironmentType.NonProduction, false);
 
 
 
 
-            Assert.NotNull(generatedCsr);
-            Assert.NotNull(privateKey);
-
-            Assert.NotEmpty(generatedCsr);
-            Assert.NotEmpty(privateKey);
-
-
-            ZatcaOnboardingService api = new ZatcaOnboardingService();
-
-            var ZatcaResult = await api.GetCSIDAsync(generatedCsr, "12345");
+            var ZatcaResult = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr, "12345");
 
             Assert.NotNull(ZatcaResult);
 
@@ -131,7 +111,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var resultPCSID = await api.GetPCSIDAsync(
+            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(
                 CsidComplianceRequestId: ZatcaResult.RequestID,
                 CsidBinarySecurityToken: ZatcaResult.BinarySecurityToken,
                 CsidSecret:  ZatcaResult.Secret);
@@ -152,27 +132,23 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             //var onboardingResult = new OnboardingResultDto();
 
 
+       
+
+            // Arrange
             var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
-            var csrGenerator = new GeneratorCsr();
+
+            // Act
+            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
 
 
+            Assert.NotNull(CsrGenerationResultDto.Csr);
+            Assert.NotNull(CsrGenerationResultDto.PrivateKey);
 
-            var (generatedCsr, privateKey, errorMessages)
-                = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, EnvironmentType.NonProduction, false);
-
-
-
-
-            Assert.NotNull(generatedCsr);
-            Assert.NotNull(privateKey);
-
-            Assert.NotEmpty(generatedCsr);
-            Assert.NotEmpty(privateKey);
+            Assert.NotEmpty(CsrGenerationResultDto.Csr);
+            Assert.NotEmpty(CsrGenerationResultDto.PrivateKey);
 
 
-            ZatcaOnboardingService api = new ZatcaOnboardingService();
-
-            var ResultCSID = await api.GetCSIDAsync(generatedCsr, "12345");
+            var ResultCSID = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr, "12345");
 
             Assert.NotNull(ResultCSID);
 
@@ -183,7 +159,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var ResultPCSID = await api.GetPCSIDAsync(
+            var ResultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(
                 CsidComplianceRequestId: ResultCSID.RequestID,
                 CsidBinarySecurityToken: ResultCSID.BinarySecurityToken,
                 CsidSecret: ResultCSID.Secret);
@@ -197,13 +173,12 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             var invoiceObject = ConstValue.InvoicesTemplateTest.GetSimpleInvoice();
 
             GeneratorInvoice generatorInvoice = new GeneratorInvoice(invoiceObject,
-            Encoding.UTF8.GetString(Convert.FromBase64String(ResultPCSID.BinarySecurityToken)),
-            privateKey);
+            Encoding.UTF8.GetString(Convert.FromBase64String(ResultPCSID.BinarySecurityToken)),CsrGenerationResultDto.PrivateKey);
 
             var signeed = generatorInvoice.GetSignedInvoiceResult();
 
-            ZatcaInvoiceService zatcaInvoiceService = new ZatcaInvoiceService();
-            var reportInvoiceZatca = await zatcaInvoiceService.SendInvoiceToZatcaApi(signeed.RequestApi,
+
+            var reportInvoiceZatca = await _zatcaInvoiceService.SendInvoiceToZatcaApi(signeed.RequestApi,
                 PCSIDBinaryToken: ResultPCSID.BinarySecurityToken,
                 PCSIDSecret: ResultPCSID.Secret, false);
 

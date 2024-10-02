@@ -1,6 +1,8 @@
 ﻿using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Services;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
-    public class ShareSenarioTest
+    public class ShareSenarioTest : IClassFixture<ServiceProviderFixture>
     {
 
         // Basic Information suppose those saved inside database after onboarding process, the info is result of onboarding procces
@@ -17,6 +19,14 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
         string PCSIDSecret = "CkYsEXfV8c1gFHAtFWoZv73pGMvh/Qyo4LzKM2h/8Hg=";
         string CrsPrivateKey = "MHQCAQEEIMJ2AKQKHbLDJIkAE0AEemVDx2aMFvmZSnEsS8ytwEbwoAcGBSuBBAAKoUQDQgAEBLqcpoam/ZbB/ZCfTss+yCwbH1T79vVJ2hPrQcuxQhpG+fsuOwEhke8jDMLeZiXygStCmWnRxxrqjuGnrqd3pw==";
         //MHQCAQEEIM9SHyquNJsAHErVNe5jEgCkbBrg61PYPOJ3f4xVWe4boAcGBSuBBAAKoUQDQgAEzMzYv9A1eVyCoHwQdI6drqGC1Jfkf5n7xEEOIFjEeUBuSllhWhpGCH+7n5RaTFUzHqOFJkedEv1gqaGUA2F56A==
+        
+        private readonly IZatcaInvoiceService _zatcaInvoiceService;
+
+        public ShareSenarioTest(ServiceProviderFixture fixture)
+        {
+            _zatcaInvoiceService = fixture.ServiceProvider.GetRequiredService<IZatcaInvoiceService>();
+        }
+        
         [Fact]
         public async Task ShareSignedInvoiceWithZatca()
         {
@@ -44,8 +54,8 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
             // 4. Share Invoice With Zatca
-            ZatcaInvoiceService zatcaInvoiceService = new ZatcaInvoiceService();
-            var reportInvoiceZatca = await zatcaInvoiceService.SendInvoiceToZatcaApi(signeed.RequestApi,
+
+            var reportInvoiceZatca = await _zatcaInvoiceService.SendInvoiceToZatcaApi(signeed.RequestApi,
                 PCSIDBinaryToken: PCSIDBinaryToken,
                 PCSIDSecret: PCSIDSecret, false);
 
