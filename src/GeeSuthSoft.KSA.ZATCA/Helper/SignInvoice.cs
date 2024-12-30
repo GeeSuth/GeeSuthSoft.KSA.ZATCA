@@ -1,12 +1,7 @@
 ﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Xml.RootPaths;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.Helper
 {
@@ -37,7 +32,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
                     Base64SignedInvoice = base64SignedInvoice,
                     Base64QrCode = base64QrCode,
                     XmlFileName = XmlFileName,
-                    RequestApi = requestApi
+                    RequestApi = requestApi,
+                    //QrImageUrl = QR.QrCodeGenerate.
                 };
             }
             catch (Exception ex)

@@ -15,9 +15,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
 {
     internal class GeneratorInvoice
     {
-        public Invoice InvoiceObject { get; set; }
-        public string X509CertificateContent { get; set; }
-        public string EcSecp256k1Privkeypem { get; set; }
+        private Invoice InvoiceObject { get; set; }
+        private string X509CertificateContent { get; set; }
+        private string EcSecp256k1Privkeypem { get; set; }
 
         public GeneratorInvoice(Invoice invoiceObject, string x509CertificateContent, string ecSecp256k1Privkeypem)
         {
@@ -27,27 +27,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
             this.EcSecp256k1Privkeypem = ecSecp256k1Privkeypem;
 
         }
-
-        //public GeneratorInvoice(XmlDocument invoiceXml, string x509CertificateContent, string ecSecp256k1Privkeypem)
-        //{
-        //    try
-        //    {
-        //        using StringReader reader = new(invoiceXml.OuterXml);
-        //        XmlSerializer serializer = new(typeof(Invoice));
-
-        //        var clearedInvoiceObject = (Invoice)serializer.Deserialize(reader);
-
-        //        this.InvoiceObject = clearedInvoiceObject;
-
-        //        this.X509CertificateContent = x509CertificateContent;
-        //        this.EcSecp256k1Privkeypem = ecSecp256k1Privkeypem;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
+        
 
         private string GetCleanInvoiceXML(bool applayXsl = true)
         {
@@ -67,10 +47,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
                 return invoiceData.ToFormattedXml();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Console.WriteLine($"Error Get CleanInvoice XML: {ex.Message}");
-                return null;
+                throw;
             }
         }
 
@@ -89,7 +68,12 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
         }
 
 
-        public void GetSignedInvoiceXML(out string InvoiceHash, out string base64SignedInvoice, out string base64QrCode, out string XmlFileName, out ZatcaRequestApi requestApi)
+        public void GetSignedInvoiceXML(
+            out string InvoiceHash, 
+            out string base64SignedInvoice, 
+            out string base64QrCode, 
+            out string XmlFileName, 
+            out ZatcaRequestApi requestApi)
         {
             try
             {

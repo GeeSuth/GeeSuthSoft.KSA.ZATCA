@@ -13,11 +13,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Dto
         public string Base64QrCode { get; set; }
         public string XmlFileName { get; set; }
         public ZatcaRequestApi RequestApi { get; set; }
-    }
-    public class ZatcaRequestApi
-    {
-        public string uuid { get; set; }
-        public string invoiceHash { get; set; }
-        public string invoice { get; set; }
+
+        public string? QrImageUrl { get; set; }
     }
 }

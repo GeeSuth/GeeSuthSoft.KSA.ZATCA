@@ -79,39 +79,4 @@ namespace GeeSuthSoft.KSA.ZATCA.Dto
         public string Timestamp { get; set; }
 
     }
-
-    public class DetailInfo
-    {
-
-        [JsonProperty("status")]
-        public string Status { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("code")]
-        public string Code { get; set; }
-
-        [JsonProperty("category")]
-        public string Category { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
-
-    }
-    public class ValidationResult
-    {
-        [JsonProperty("status")]
-        public string Status { get; set; }
-
-        [JsonProperty("infoMessages")]
-        public List<DetailInfo> InfoMessages { get; set; }
-
-        [JsonProperty("warningMessages")]
-        public List<DetailInfo> WarningMessages { get; set; }
-
-        [JsonProperty("errorMessages")]
-        public List<DetailInfo> ErrorMessages { get; set; }
-
-    }
 }
