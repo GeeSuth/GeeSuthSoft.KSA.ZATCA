@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace GeeSuthSoft.KSA.ZATCA.XunitTest
+﻿namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
     public class GenerateQRTest
     {

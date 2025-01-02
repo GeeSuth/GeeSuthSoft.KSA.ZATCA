@@ -34,4 +34,14 @@ namespace GeeSuthSoft.KSA.ZATCA.Enums
         Simulation,
         Production
     }
+
+    public abstract class ZatcaReportingStatus
+    {
+        public const string REPORTED = "REPORTED";
+    }
+
+    public abstract class ZatcaValidationResults
+    {
+        public const string PASS = "PASS";
+    }
 }

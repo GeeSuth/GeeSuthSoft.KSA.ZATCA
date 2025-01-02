@@ -1,11 +1,6 @@
 ﻿using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Xml.RootPaths;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue
 {
@@ -23,7 +18,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue
                 InvoiceTypeCode = new InvoiceTypeCode(InvoiceType.TaxInvoice, "0200000"),
                 DocumentCurrencyCode = "SAR",
                 TaxCurrencyCode = "SAR",
-                Note = new Note()
+                Note = new Note
                 {
                     LanguageID = "ar",
                     Value = "ABC"

@@ -1,153 +1,96 @@
 ﻿using GeeSuthSoft.KSA.ZATCA.Xml.RootPaths;
-using QRCoder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Xml;
 using GeeSuthSoft.KSA.ZATCA.Dto;
+using GeeSuthSoft.KSA.ZATCA.Extensions;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 
 namespace GeeSuthSoft.KSA.ZATCA.Generators
 {
-    internal class GeneratorInvoice
+    internal class GeneratorInvoice(Invoice invoiceObject, string x509CertificateContent, string ecSecp256K1Privkeypem)
     {
-        private Invoice InvoiceObject { get; set; }
-        private string X509CertificateContent { get; set; }
-        private string EcSecp256k1Privkeypem { get; set; }
+        private Invoice InvoiceObject { get; } = invoiceObject;
+        private string X509CertificateContent { get; } = x509CertificateContent;
+        private string EcSecp256k1Privkeypem { get; } = ecSecp256K1Privkeypem;
 
-        public GeneratorInvoice(Invoice invoiceObject, string x509CertificateContent, string ecSecp256k1Privkeypem)
-        {
-            this.InvoiceObject = invoiceObject;
-
-            this.X509CertificateContent = x509CertificateContent;
-            this.EcSecp256k1Privkeypem = ecSecp256k1Privkeypem;
-
-        }
-        
-
-        private string GetCleanInvoiceXML(bool applayXsl = true)
-        {
-            try
-            {
-                XmlSerializerNamespaces namespaces = new();
-                namespaces.Add("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
-                namespaces.Add("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
-                namespaces.Add("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
-
-                var invoiceData = InvoiceObject.ObjectToXml(namespaces);
-
-                //invoiceData = invoiceData.MoveLastAttributeToFirst();
-
-                if (applayXsl) { invoiceData = invoiceData.ApplyXSLT(SharedUtilities.ReadResource("ZatcaDataInvoice.xsl"), true); }
-
-                return invoiceData.ToFormattedXml();
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
 
         public SignedInvoiceResult GetSignedInvoiceResult()
         {
-            GetSignedInvoiceXML(out string invoiceHash, out string base64SignedInvoice, out string base64QrCode, out string xmlFileName, out ZatcaRequestApi requestApi);
-
-            return new SignedInvoiceResult()
-            {
-                InvoiceHash = invoiceHash,
-                Base64SignedInvoice = base64SignedInvoice,
-                Base64QrCode = base64QrCode,
-                XmlFileName = xmlFileName,
-                RequestApi = requestApi
-            };
+            return GetSignedInvoiceXML();
         }
 
 
-        public void GetSignedInvoiceXML(
-            out string InvoiceHash, 
-            out string base64SignedInvoice, 
-            out string base64QrCode, 
-            out string XmlFileName, 
-            out ZatcaRequestApi requestApi)
+        public SignedInvoiceResult GetSignedInvoiceXML()
         {
-            try
+            SignedInvoiceResult result = new();
+                
+            string CleanInvoice = InvoiceObject.GetCleanInvoiceXML(false);
+            result.InvoiceHash = SharedUtilities.GetBase64InvoiceHash(CleanInvoice);
+
+                
+
+            if (InvoiceObject.InvoiceTypeCode.Name.StartsWith("02"))
             {
-                string CleanInvoice = GetCleanInvoiceXML(false);
-                InvoiceHash = SharedUtilities.GetBase64InvoiceHash(CleanInvoice);
 
-                base64QrCode = "";
+                byte[] certificateBytes = Encoding.UTF8.GetBytes(X509CertificateContent);
+                X509Certificate2 parsedCertificate = new(certificateBytes);
 
-                if (InvoiceObject.InvoiceTypeCode.Name.StartsWith("02"))
-                {
-
-                    byte[] certificateBytes = Encoding.UTF8.GetBytes(X509CertificateContent);
-                    X509Certificate2 parsedCertificate = new(certificateBytes);
-
-                    string SignatureTimestamp = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss");
-                    string PublicKeyHashing = Convert.ToBase64String(Encoding.UTF8.GetBytes(SharedUtilities.HashSha256AsString(X509CertificateContent)));
-                    string IssuerName = parsedCertificate.IssuerName.Name;
-                    string SerialNumber = SharedUtilities.GetSerialNumberForCertificateObject(parsedCertificate);
-                    string SignedPropertiesHash = SharedUtilities.GetSignedPropertiesHash(SignatureTimestamp, PublicKeyHashing, IssuerName, SerialNumber);
+                string SignatureTimestamp = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss");
+                string PublicKeyHashing = Convert.ToBase64String(Encoding.UTF8.GetBytes(SharedUtilities.HashSha256AsString(X509CertificateContent)));
+                string IssuerName = parsedCertificate.IssuerName.Name;
+                string SerialNumber = SharedUtilities.GetSerialNumberForCertificateObject(parsedCertificate);
+                string SignedPropertiesHash = SharedUtilities.GetSignedPropertiesHash(SignatureTimestamp, PublicKeyHashing, IssuerName, SerialNumber);
 
 
-                    string SignatureValue = SharedUtilities.GetDigitalSignature(InvoiceHash, EcSecp256k1Privkeypem);
+                string SignatureValue = SharedUtilities.GetDigitalSignature( result.InvoiceHash, EcSecp256k1Privkeypem);
 
-                    SignedUBL signedUBL = new(InvoiceHash,
-                        SignedPropertiesHash,
-                        SignatureValue,
-                        X509CertificateContent,
+                SignedUBL signedUBL = new(result. InvoiceHash,
+                    SignedPropertiesHash,
+                    SignatureValue,
+                    X509CertificateContent,
                     SignatureTimestamp,
                     PublicKeyHashing,
-                        IssuerName,
-                        SerialNumber);
+                    IssuerName,
+                    SerialNumber);
 
-                    base64QrCode = QrCodeGenerator.GenerateQRCode(InvoiceObject, signedUBL);
+                result.Base64QrCodeContent = QrCodeGenerator.GenerateQRCodeContent(InvoiceObject, signedUBL);
 
-                    string stringXMLQrCode = SharedUtilities.ReadResource("ZatcaDataQr.xml").Replace("TLV_QRCODE_STRING", base64QrCode);
-                    string stringXMLSignature = SharedUtilities.ReadResource("ZatcaDataSignature.xml");
-                    string stringUBLExtension = signedUBL.ToString();
+                string stringXMLQrCode = SharedUtilities.ReadResource("ZatcaDataQr.xml").Replace("TLV_QRCODE_STRING", result.Base64QrCodeContent);
+                string stringXMLSignature = SharedUtilities.ReadResource("ZatcaDataSignature.xml");
+                string stringUBLExtension = signedUBL.ToString();
 
-                    int profileIDIndex = CleanInvoice.IndexOf("<cbc:ProfileID>");
-                    CleanInvoice = CleanInvoice.Insert(profileIDIndex - 6, stringUBLExtension);
+                int profileIDIndex = CleanInvoice.IndexOf("<cbc:ProfileID>", StringComparison.Ordinal);
+                CleanInvoice = CleanInvoice.Insert(profileIDIndex - 6, stringUBLExtension);
 
-                    int AccountingSupplierPartyIndex = CleanInvoice.IndexOf("<cac:AccountingSupplierParty>");
+                int AccountingSupplierPartyIndex = CleanInvoice.IndexOf("<cac:AccountingSupplierParty>", StringComparison.Ordinal);
 
-                    CleanInvoice = CleanInvoice.Insert(AccountingSupplierPartyIndex - 6, stringXMLQrCode);
+                CleanInvoice = CleanInvoice.Insert(AccountingSupplierPartyIndex - 6, stringXMLQrCode);
 
-                    AccountingSupplierPartyIndex = CleanInvoice.IndexOf("<cac:AccountingSupplierParty>");
+                AccountingSupplierPartyIndex = CleanInvoice.IndexOf("<cac:AccountingSupplierParty>", StringComparison.Ordinal);
 
-                    CleanInvoice = CleanInvoice.Insert(AccountingSupplierPartyIndex - 6, stringXMLSignature);
-
-                }
-
-                byte[] bytes = Encoding.UTF8.GetBytes(CleanInvoice);
-                base64SignedInvoice = Convert.ToBase64String(bytes);
-
-                requestApi = new ZatcaRequestApi()
-                {
-                    invoiceHash = InvoiceHash,
-                    uuid = InvoiceObject.UUID,
-                    invoice = base64SignedInvoice
-                };
-
-                string SellerIdentification = InvoiceObject.AccountingSupplierParty.Party.PartyTaxScheme.CompanyID.ToString();
-                string IssueDate = InvoiceObject.IssueDate.Replace("-", "");
-                string IssueTime = InvoiceObject.IssueTime.Replace(":", "");
-                string InvoiceNumber = new string(InvoiceObject.ID.Value.ToString().Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c).ToArray());
-
-                XmlFileName = $"{SellerIdentification}_{IssueDate}{IssueTime}_{InvoiceNumber}.xml";
+                CleanInvoice = CleanInvoice.Insert(AccountingSupplierPartyIndex - 6, stringXMLSignature);
 
             }
-            catch (Exception)
+
+            byte[] bytes = Encoding.UTF8.GetBytes(CleanInvoice);
+            result.Base64SignedInvoice = Convert.ToBase64String(bytes);
+
+            // TODO: need to investigate cause it's repeated with above once.
+            result.RequestApi = new ZatcaRequestApi()
             {
-                //Console.WriteLine($"Error Get SignedInvoice XML: {ex.Message}");
-                throw;
-            }
+                invoiceHash = result. InvoiceHash,
+                uuid = InvoiceObject.UUID,
+                invoice = result.Base64SignedInvoice
+            };
+
+            string SellerIdentification = InvoiceObject.AccountingSupplierParty.Party.PartyTaxScheme.CompanyID.ToString();
+            string IssueDate = InvoiceObject.IssueDate.Replace("-", "");
+            string IssueTime = InvoiceObject.IssueTime.Replace(":", "");
+            string InvoiceNumber = new string(InvoiceObject.ID.Value.ToString().Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c).ToArray());
+
+            result.XmlFileName = $"{SellerIdentification}_{IssueDate}{IssueTime}_{InvoiceNumber}.xml";
+
+            return result;
         }
 
     }

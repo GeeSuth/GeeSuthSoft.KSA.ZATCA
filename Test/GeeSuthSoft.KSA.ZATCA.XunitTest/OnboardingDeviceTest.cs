@@ -1,16 +1,9 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
+﻿using System.Text;
 using GeeSuthSoft.KSA.ZATCA.Generators;
-using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Services;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
@@ -30,10 +23,10 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
         public void Generate_Csr_Test()
         {
             // Arrange
-            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+            var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
 
             // Act
-            var result = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+            var result = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
             // Assert
             Assert.NotNull(result);
@@ -48,10 +41,10 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
         {
 
             // Arrange
-            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+            var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
 
             // Act
-            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
 
             Assert.NotNull(CsrGenerationResultDto.Csr);
@@ -61,7 +54,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             Assert.NotEmpty(CsrGenerationResultDto.PrivateKey);
 
 
-            var result = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr, "12345");
+            var result = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr);
 
             Assert.NotNull(result);
 
@@ -82,10 +75,10 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
             // Arrange
-            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+            var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
 
             // Act
-            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
 
             Assert.NotNull(CsrGenerationResultDto.Csr);
@@ -100,7 +93,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var ZatcaResult = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr, "12345");
+            var ZatcaResult = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr);
 
             Assert.NotNull(ZatcaResult);
 
@@ -135,10 +128,10 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
        
 
             // Arrange
-            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+            var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
 
             // Act
-            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+            var CsrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
 
             Assert.NotNull(CsrGenerationResultDto.Csr);
@@ -148,7 +141,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             Assert.NotEmpty(CsrGenerationResultDto.PrivateKey);
 
 
-            var ResultCSID = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr, "12345");
+            var ResultCSID = await _zatcaOnboardingService.GetCSIDAsync(CsrGenerationResultDto.Csr);
 
             Assert.NotNull(ResultCSID);
 
@@ -170,7 +163,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var invoiceObject = ConstValue.InvoicesTemplateTest.GetSimpleInvoice();
+            var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();
 
             GeneratorInvoice generatorInvoice = new GeneratorInvoice(invoiceObject,
             Encoding.UTF8.GetString(Convert.FromBase64String(ResultPCSID.BinarySecurityToken)),CsrGenerationResultDto.PrivateKey);

@@ -1,8 +1,5 @@
-
-using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
-using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Services;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,8 +19,8 @@ public class GenerateCRsTest : IClassFixture<ServiceProviderFixture>
     public void Generate_Crs_Test()
     {
         
-        var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
-        var csrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+        var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
+        var csrGenerationResultDto = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
         Assert.NotNull(csrGenerationResultDto);
         Assert.NotNull(csrGenerationResultDto.Csr);
@@ -35,8 +32,8 @@ public class GenerateCRsTest : IClassFixture<ServiceProviderFixture>
     public void Generate_Crs_Test_shouldFail()
     {
 
-        var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo("");
-        var exception = Assert.Throws<Exception>(() => _zatcaOnboardingService.GenerateCsr(csrGenerationDto,  false));
+        var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo("");
+        var exception = Assert.Throws<Exception>(() => _zatcaOnboardingService.GenerateCsr(csrGenerationDto));
         Assert.StartsWith("CSR configuration is not valid. Errors:", exception.Message, StringComparison.OrdinalIgnoreCase);
 
     }

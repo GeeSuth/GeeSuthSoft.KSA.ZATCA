@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GeeSuthSoft.KSA.ZATCA.Dto
+﻿namespace GeeSuthSoft.KSA.ZATCA.Dto
 {
     public class SignedInvoiceResult
     {
-        public string InvoiceHash { get; set; }
-        public string Base64SignedInvoice { get; set; }
-        public string Base64QrCode { get; set; }
-        public string XmlFileName { get; set; }
-        public ZatcaRequestApi RequestApi { get; set; }
+        public string InvoiceHash { get; set; } = null!;
+        public string Base64SignedInvoice { get; set; }= null!;
+        public string Base64QrCodeContent { get; set; }= null!;
+        public string XmlFileName { get; set; }= null!;
+        public ZatcaRequestApi RequestApi { get; set; } = null!;
 
         public string? QrImageUrl { get; set; }
+    }
+
+    public abstract class ContentQR
+    {
+        public string Base64QrCodeContent { get; set; }= null!;
     }
 }

@@ -1,9 +1,10 @@
 ﻿using GeeSuthSoft.KSA.ZATCA.Dto;
+using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Services;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
@@ -26,10 +27,10 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
             var onboardingResult = new OnboardingResultDto();
 
-            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+            var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
 
             // Act
-            var resultGenerateCsr = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+            var resultGenerateCsr = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
             // Assert
             Assert.NotNull(resultGenerateCsr);
@@ -50,7 +51,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var ZatcaResult = await _zatcaOnboardingService.GetCSIDAsync(onboardingResult.GeneratedCsr, "12345");
+            var ZatcaResult = await _zatcaOnboardingService.GetCSIDAsync(onboardingResult.GeneratedCsr);
 
             Assert.NotNull(ZatcaResult);
 
@@ -67,7 +68,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
                 CsidSecret: ZatcaResult.Secret);
 
 
-            var invoiceObject = ConstValue.InvoicesTemplateTest.GetSimpleInvoice();
+            var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();
 
             SignInvoice signInvoice = new SignInvoice();
 
@@ -91,8 +92,8 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
             Assert.NotNull(result);
 
-            Assert.Equal("REPORTED", result.ReportingStatus);
-            Assert.Equal("PASS", result.ValidationResults.Status);
+            Assert.Equal(ZatcaReportingStatus.REPORTED, result.ReportingStatus);
+            Assert.Equal(ZatcaValidationResults.PASS, result.ValidationResults.Status);
         }
     }
 }

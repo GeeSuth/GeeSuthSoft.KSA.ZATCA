@@ -10,23 +10,22 @@ using Microsoft.Extensions.Logging;
 namespace GeeSuthSoft.KSA.ZATCA.Services
 {
 
-    public class ZatcaInvoiceService : IZatcaInvoiceService
+    public class ZatcaInvoiceService(
+        IHttpClientFactory httpClientFactory,
+        ILogger<ZatcaInvoiceService> logger,
+        IZatcaApiConfig zatcaApiConfig)
+        : LoggerHelper(zatcaApiConfig , logger: logger), IZatcaInvoiceService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<ZatcaInvoiceService> _logger;
-        private readonly IZatcaApiConfig _zatcaApiConfig;
+        private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        private readonly ILogger<ZatcaInvoiceService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IZatcaApiConfig _zatcaApiConfig = zatcaApiConfig ?? throw new ArgumentNullException(nameof(zatcaApiConfig));
 
-        public ZatcaInvoiceService(IHttpClientFactory httpClientFactory,
-                                   ILogger<ZatcaInvoiceService> logger,
-                                   IZatcaApiConfig zatcaApiConfig)
-        {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _zatcaApiConfig = zatcaApiConfig ?? throw new ArgumentNullException(nameof(zatcaApiConfig));
-        }
+        //private readonly LoggerHelper Zatcalogger;
 
-  public async Task<ServerResult> ComplianceCheck(string ccsidBinaryToken, string ccsidSecret, ZatcaRequestApi requestApi)
+        public async Task<ServerResult> ComplianceCheck(string ccsidBinaryToken, string ccsidSecret, ZatcaRequestApi requestApi)
         {
+            LogZatcaInfo($"Compliance Check...{requestApi.uuid} Invoice");
+            
             var client = _httpClientFactory.CreateClient();
             ConfigureHttpClient(client, ccsidBinaryToken, ccsidSecret);
 
@@ -35,6 +34,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             try
             {
                 var response = await client.PostAsync(_zatcaApiConfig.ComplianceCheckUrl, content);
+                
+                LogZatcaInfo($"Complianced Check...{requestApi.uuid} Invoice, ResponseCode: {response.StatusCode}");
                 response.EnsureSuccessStatusCode();
 
                 var resultContent = await response.Content.ReadAsStringAsync();
@@ -42,7 +43,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during compliance check");
+                LogZatcaError(ex, "Error during compliance check");
                 throw;
             }
         }
@@ -50,6 +51,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         public async Task<HttpResponseMessage> SendInvoiceToZatcaApi(ZatcaRequestApi zatcaRequestApi,
             string pcsidBinaryToken, string pcsidSecret, bool isClearance)
         {
+            LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice");
+            
            try {
             var client = _httpClientFactory.CreateClient();
             ConfigureHttpClient(client, pcsidBinaryToken, pcsidSecret, isClearance);
@@ -57,13 +60,16 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             var content = new StringContent(JsonConvert.SerializeObject(zatcaRequestApi), Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync(_zatcaApiConfig.ReportingUrl, content);
+            
+            LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice, ResponseCode: {response.StatusCode}");
+
             response.EnsureSuccessStatusCode();
             return response;
            }
            catch (Exception ex)
            {
-            _logger.LogError(ex, "Error during compliance check");
-            throw;
+               LogZatcaError(ex, "Error during compliance check");
+               throw;
            }
         }
 

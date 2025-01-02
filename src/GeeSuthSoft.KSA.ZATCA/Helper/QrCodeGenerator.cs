@@ -12,7 +12,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
 {
     internal static class QrCodeGenerator
     {
-        internal static string GenerateQRCode(Invoice invoiceObject, SignedUBL signedUBL)
+        internal static string GenerateQRCodeContent(Invoice invoiceObject, SignedUBL signedUBL)
         {
             try
             {

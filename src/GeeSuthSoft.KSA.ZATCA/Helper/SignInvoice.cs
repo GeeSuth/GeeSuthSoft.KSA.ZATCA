@@ -21,24 +21,12 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
                     Secret
                 );
 
-                ig.GetSignedInvoiceXML(out string invoiceHash, 
-                    out string base64SignedInvoice, 
-                    out string base64QrCode, 
-                    out string XmlFileName, 
-                    out ZatcaRequestApi requestApi);
-
-                return new SignedInvoiceResult
-                {
-                    Base64SignedInvoice = base64SignedInvoice,
-                    Base64QrCode = base64QrCode,
-                    XmlFileName = XmlFileName,
-                    RequestApi = requestApi,
-                    //QrImageUrl = QR.QrCodeGenerate.
-                };
+                return ig.GetSignedInvoiceXML();
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating signed invoice: {ex.Message}");
+                Console.WriteLine($@"Error creating signed invoice: {ex.Message}");
                 throw;
             }
         }

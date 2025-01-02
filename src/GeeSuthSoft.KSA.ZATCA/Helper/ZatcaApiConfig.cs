@@ -19,6 +19,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
         public string ProductionCSIDUrl {get;}
         
         public EnvironmentType Environment {get;}
+        
+        public bool LogsEnabled { get; }
     }
     public class ZatcaApiConfig : IZatcaApiConfig
     {
@@ -48,5 +50,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
             //return $"https://gw-fatoora.zatca.gov.sa/e-invoicing/{environment}/{endpoint}";
             return $"{_zatcaOptions.Value.ZatcaBaseUrl ?? "https://gw-fatoora.zatca.gov.sa"}/e-invoicing/{environment}/{endpoint}";
         }
+        
+        public bool LogsEnabled => _zatcaOptions.Value.LogRequestAndResponse;
     }
 }

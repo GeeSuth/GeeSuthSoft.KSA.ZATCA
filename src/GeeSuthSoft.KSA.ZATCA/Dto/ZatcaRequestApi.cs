@@ -2,7 +2,7 @@
 
 public class ZatcaRequestApi
 {
-    public string uuid { get; set; }
-    public string invoiceHash { get; set; }
-    public string invoice { get; set; }
+    public string uuid { get; set; }= null!;
+    public string invoiceHash { get; set; }= null!;
+    public string invoice { get; set; }= null!;
 }

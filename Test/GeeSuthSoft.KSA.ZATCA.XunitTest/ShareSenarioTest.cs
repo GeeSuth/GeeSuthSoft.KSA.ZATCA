@@ -1,13 +1,9 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Generators;
-using GeeSuthSoft.KSA.ZATCA.Helper;
+﻿using System.Text;
+using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Services;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
@@ -26,7 +22,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
         public async Task ShareSignedInvoiceWithZatca()
         {
             // 1. Get Generate Invoice
-            var invoiceObject = ConstValue.InvoicesTemplateTest.GetSimpleInvoice();
+            var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();
             if(invoiceObject == null ) Assert.Fail("Generate Invoice Is Failed!");
 
 
@@ -38,8 +34,8 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             //    Secret: CrsPrivateKey);
 
             GeneratorInvoice generatorInvoice = new GeneratorInvoice(invoiceObject,
-            Encoding.UTF8.GetString(Convert.FromBase64String(ConstValue.AuthTest.PCSIDBinaryToken)),
-            ConstValue.AuthTest.CrsPrivateKey);
+            Encoding.UTF8.GetString(Convert.FromBase64String(AuthTest.PCSIDBinaryToken)),
+            AuthTest.CrsPrivateKey);
 
             var signeed = generatorInvoice.GetSignedInvoiceResult();
 
@@ -51,8 +47,8 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             // 4. Share Invoice With Zatca
 
             var reportInvoiceZatca = await _zatcaInvoiceService.SendInvoiceToZatcaApi(signeed.RequestApi,
-                PCSIDBinaryToken: ConstValue.AuthTest.PCSIDBinaryToken,
-                PCSIDSecret: ConstValue.AuthTest.PCSIDSecret, false);
+                PCSIDBinaryToken: AuthTest.PCSIDBinaryToken,
+                PCSIDSecret: AuthTest.PCSIDSecret, false);
 
 
             Assert.NotNull(reportInvoiceZatca);

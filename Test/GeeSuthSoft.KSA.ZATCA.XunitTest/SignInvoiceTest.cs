@@ -1,17 +1,9 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
+﻿using System.Text;
 using GeeSuthSoft.KSA.ZATCA.Generators;
-using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Services;
-using GeeSuthSoft.KSA.ZATCA.Xml.RootPaths;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 {
@@ -29,10 +21,10 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
         {
 
 
-            var csrGenerationDto = ConstValue.CompanyTemplateTest.CrsCompanyInfo();
+            var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo();
 
             // Act
-            var resultCrs = _zatcaOnboardingService.GenerateCsr(csrGenerationDto, false);
+            var resultCrs = _zatcaOnboardingService.GenerateCsr(csrGenerationDto);
 
             // Assert
             Assert.NotNull(resultCrs);
@@ -43,7 +35,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var resultCSID = await _zatcaOnboardingService.GetCSIDAsync(resultCrs.Csr, "12345");
+            var resultCSID = await _zatcaOnboardingService.GetCSIDAsync(resultCrs.Csr);
 
             Assert.NotNull(resultCSID);
 
@@ -60,7 +52,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
                 CsidSecret: resultCSID.Secret);
 
 
-            var invoiceObject = ConstValue.InvoicesTemplateTest.GetSimpleInvoice();
+            var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();
 
             GeneratorInvoice generatorInvoice = new GeneratorInvoice(invoiceObject,
                 Encoding.UTF8.GetString(Convert.FromBase64String(resultPCSID.BinarySecurityToken)),

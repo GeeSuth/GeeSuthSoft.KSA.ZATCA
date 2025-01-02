@@ -1,5 +1,3 @@
-
-
 using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Generators;
@@ -30,7 +28,7 @@ public class GenerateCrsInternalTest
 
             var csrGenerator = new GeneratorCsr();
             var (generatedCsr, privateKey, errorMessages)
-                = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, EnvironmentType.NonProduction, false);
+                = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, EnvironmentType.NonProduction);
 
 
             onboardingResult.GeneratedCsr = generatedCsr;

@@ -1,12 +1,6 @@
-
-using Microsoft.Extensions.DependencyInjection;
-using GeeSuthSoft.KSA.ZATCA.Services;
-using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Enums;
-using Microsoft.Extensions.Options;
-using System;
-using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest.Shared
 {
@@ -22,6 +16,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.Shared
             {
                 options.ZatcaBaseUrl = "https://gw-fatoora.zatca.gov.sa";
                 options.Environment = EnvironmentType.NonProduction;
+                options.LogRequestAndResponse = true;
             });
 
             /* // Configure services
