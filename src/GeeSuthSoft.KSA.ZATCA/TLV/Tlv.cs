@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GeeSuthSoft.KSA.ZATCA.TLV
 {
+    [Obsolete("This class is obsolete and will be removed in a future version.")]
     public static class Tlv
     {
 

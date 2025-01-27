@@ -1,18 +1,23 @@
-﻿using System.Text;
+﻿using System.Drawing;
+using System.Text;
+using GeeSuthSoft.KSA.ZATCA.Extensions;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Services;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
+using GeeSuthSoft.KSA.ZATCA.XunitTest.HelperTest;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GeeSuthSoft.KSA.ZATCA.XunitTest
-{
-    public class SignInvoiceTest(ServiceProviderFixture fixture) : IClassFixture<ServiceProviderFixture>
+namespace GeeSuthSoft.KSA.ZATCA.XunitTest;
+
+
+
+  public class GenerateQrPhaseTwoTest(ServiceProviderFixture fixture) : IClassFixture<ServiceProviderFixture>
     {
         private readonly IZatcaOnboardingService _zatcaOnboardingService = fixture.ServiceProvider.GetRequiredService<IZatcaOnboardingService>();
 
         [Fact]
-        public async Task GenerateSignedInvoiceTestAsync()
+        public async Task GenerateQrFromSignedInvoice_CanOpenInQrBrowser_TestAsync()
         {
 
 
@@ -54,18 +59,26 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
                 resultCrs.PrivateKey);
 
             var signeed = generatorInvoice.GetSignedInvoiceResult();
-
-            //SignInvoice signInvoice = new SignInvoice();
-
-            //var signed = signInvoice.GenerateSignedInvoice(invoiceObject,
-            //    BinaryToken: resultPCSID.BinarySecurityToken,
-            //    Secret: resultPCSID.Secret);
-
+            
 
             Assert.NotNull(signeed);
             Assert.NotNull(signeed.Base64SignedInvoice);
             Assert.NotNull(signeed.RequestApi);
 
+
+            var QrURLcanOpenInUObrowser = signeed.Base64QrCodeContent.GenerateImageDirectOpenInBrowser();
+
+            Assert.NotNull(QrURLcanOpenInUObrowser);
+            
+            
+            // Decode the Invoice
+            var decodeObject = signeed.Base64QrCodeContent.DecodeToObject();
+            Assert.NotNull(decodeObject);
+            Assert.NotEmpty(decodeObject.QrCode.ArabicCompanyName);
+            Assert.NotEmpty(decodeObject.QrCode.EnglishCompanyName);
+            Assert.NotEmpty(decodeObject.QrCode.TaxNumber);
+
+
         }
+        
     }
-}

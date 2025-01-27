@@ -53,9 +53,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
                     IssuerName,
                     SerialNumber);
 
-                result.Base64QrCodeContent = QrCodeGenerator.GenerateQRCodeContent(InvoiceObject, signedUBL);
+                result.Base64QrCodeContent.Base64QrCodeContent = QrCodeGenerator.GenerateQRCodeContent(InvoiceObject, signedUBL);
 
-                string stringXMLQrCode = SharedUtilities.ReadResource("ZatcaDataQr.xml").Replace("TLV_QRCODE_STRING", result.Base64QrCodeContent);
+                string stringXMLQrCode = SharedUtilities.ReadResource("ZatcaDataQr.xml").Replace("TLV_QRCODE_STRING", result.Base64QrCodeContent.Base64QrCodeContent);
                 string stringXMLSignature = SharedUtilities.ReadResource("ZatcaDataSignature.xml");
                 string stringUBLExtension = signedUBL.ToString();
 

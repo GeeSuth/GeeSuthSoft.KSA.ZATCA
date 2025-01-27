@@ -81,6 +81,8 @@ public class ShareInvoiceZatcaTest(ServiceProviderFixture fixture) : IClassFixtu
             true, pcsidTokens);
         
         Assert.True(resultShare.reportingStatus == "REPORTED");
+        Assert.True(resultShare.validationResults?.errorMessages?.Length == 0,"Error validation return");
+        Assert.True(resultShare.validationResults?.warningMessages?.Length == 0,"Warning validation return");
     }
     
     [Fact]
