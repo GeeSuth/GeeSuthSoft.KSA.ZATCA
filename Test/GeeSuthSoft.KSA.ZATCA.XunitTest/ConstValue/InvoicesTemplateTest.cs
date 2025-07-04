@@ -13,8 +13,8 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue
                 ProfileID = "reporting:1.0",
                 ID = new ID("SME00010"),
                 UUID = "8e6000cf-1a98-4174-b3e7-b5d5954bc10d",
-                IssueDate = "2022-08-17",
-                IssueTime = "17:41:08",
+                IssueDate = "2025-07-05",
+                IssueTime = "01:41:08",
                 InvoiceTypeCode = new InvoiceTypeCode(InvoiceType.TaxInvoice, "0200000"),
                 DocumentCurrencyCode = "SAR",
                 TaxCurrencyCode = "SAR",
@@ -195,7 +195,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue
                           PriceAmount = new Amount("SAR", 3.00),
                           AllowanceCharge = new AllowanceCharge
                           {
-                              ChargeIndicator = true,
+                              ChargeIndicator = false, // it's not allowed to be true anymore due to Zatca : BR-KSA-EN16931-06 = Charge on price level (BG-29) is not allowed. The value of Indicator can only be 'false'. in (v3.4.2)
                               AllowanceChargeReason = "discount",
                               Amount = new Amount("SAR", 0.00)
                           }
@@ -229,7 +229,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue
                             PriceAmount = new Amount("SAR", 34.00),
                             AllowanceCharge = new AllowanceCharge
                             {
-                                ChargeIndicator = true,
+                                ChargeIndicator = false, // it's not allowed to be true anymore due to Zatca : BR-KSA-EN16931-06 = Charge on price level (BG-29) is not allowed. The value of Indicator can only be 'false'. in (v3.4.2)
                                 AllowanceChargeReason = "discount",
                                 Amount = new Amount("SAR", 0.00)
                             }

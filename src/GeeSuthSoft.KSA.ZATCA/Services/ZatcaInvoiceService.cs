@@ -34,11 +34,12 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             try
             {
                 var response = await client.PostAsync(_zatcaApiConfig.ComplianceCheckUrl, content);
-                
-                LogZatcaInfo($"Complianced Check...{requestApi.uuid} Invoice, ResponseCode: {response.StatusCode}");
-                response.EnsureSuccessStatusCode();
-
                 var resultContent = await response.Content.ReadAsStringAsync();
+                
+                LogZatcaInfo($"Complianced Check...[{requestApi.uuid}] Invoice, ResponseCode: [{response.StatusCode}], ResponseBody: [{resultContent}]");
+                //response.EnsureSuccessStatusCode();
+
+                
                 return JsonConvert.DeserializeObject<ServerResult>(resultContent);
             }
             catch (Exception ex)
@@ -63,7 +64,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             
             LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice, ResponseCode: {response.StatusCode}");
 
-            response.EnsureSuccessStatusCode();
+            //response.EnsureSuccessStatusCode();
             return response;
            }
            catch (Exception ex)

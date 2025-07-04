@@ -43,7 +43,7 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
                 LogZatcaInfo($"Sharing Invoice Id: {invoiceObject.ID} Response Not 200_OK Error Response : {await result.Content.ReadAsStringAsync()}");
             }
 
-            result.EnsureSuccessStatusCode();
+            //result.EnsureSuccessStatusCode();
             
             var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
             response.SignedInvoiceResult = signedInvoice;

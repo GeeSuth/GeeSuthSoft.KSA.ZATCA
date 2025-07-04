@@ -134,7 +134,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
 
                 LogZatcaInfo($"Get PCSID Response Status Code: {response.StatusCode}");
                 
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
 
                 var resultContent = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent) ??
