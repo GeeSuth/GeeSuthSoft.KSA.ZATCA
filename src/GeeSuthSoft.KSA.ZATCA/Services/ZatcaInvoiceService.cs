@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
+using GeeSuthSoft.KSA.ZATCA.Exceptions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
@@ -45,7 +46,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             catch (Exception ex)
             {
                 LogZatcaError(ex, "Error during compliance check");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
         }
 
@@ -70,7 +71,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
            catch (Exception ex)
            {
                LogZatcaError(ex, "Error during compliance check");
-               throw;
+               throw new GeeSuthSoftZatcaUnExpectedException(ex);
            }
         }
 

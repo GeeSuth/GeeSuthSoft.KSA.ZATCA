@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text;
 using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Enums;
+using GeeSuthSoft.KSA.ZATCA.Exceptions;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.Xml.RootPaths;
@@ -21,6 +22,11 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
     {
         try
         {
+            if (!tokens.isValid)
+            {
+                throw new GeeSuthSoftZatcaInCorrectConfigException("Tokens are invalid");
+            }
+            
             LogZatcaInfo($"Sharing Invoice : {invoiceObject.ID}");
         
             var signedInvoice = new GeneratorInvoice(invoiceObject,
@@ -46,13 +52,15 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
             //result.EnsureSuccessStatusCode();
             
             var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
+            response.ValiDateZatcaResponse();
+            
             response.SignedInvoiceResult = signedInvoice;
             return response;
         }
         catch (Exception ex)
         {
             LogZatcaError(ex,"Error with sharing invoice, the ZATCA response not as expected");
-            throw;
+            throw new GeeSuthSoftZatcaUnExpectedException(ex);
         }
     }
 }

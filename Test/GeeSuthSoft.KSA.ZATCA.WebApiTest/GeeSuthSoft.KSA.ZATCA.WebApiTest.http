@@ -1,0 +1,6 @@
+@GeeSuthSoft.KSA.ZATCA.WebApiTest_HostAddress = http://localhost:5179
+
+GET {{GeeSuthSoft.KSA.ZATCA.WebApiTest_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using GeeSuthSoft.KSA.ZATCA.Exceptions;
 
 [assembly: InternalsVisibleTo("GeeSuthSoft.KSA.ZATCA.XunitTest")]
 namespace GeeSuthSoft.KSA.ZATCA.Generators
@@ -33,7 +34,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
 
             if (!csrGenerationDto.IsValid(out errorMessages))
             {
-                throw new Exception("CSR configuration is not valid. Errors: " + string.Join(", ", errorMessages));
+                throw new GeeSuthSoftZatcaWorngUseException("CSR configuration is not valid. Errors: " + string.Join(", ", errorMessages));
             }
 
             AsymmetricCipherKeyPair keyPair = GenerateKeyPair();

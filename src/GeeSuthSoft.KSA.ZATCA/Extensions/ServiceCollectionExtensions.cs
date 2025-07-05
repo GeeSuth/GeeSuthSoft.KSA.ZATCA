@@ -13,12 +13,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddZatca(this IServiceCollection services,
     Action<ZatcaOptions> configureOptions)
     {
-        if(!services.Any(w=>w.ServiceType == typeof(IHttpClientFactory)))
+        if(services.All(w => w.ServiceType != typeof(IHttpClientFactory)))
         {
             services.AddHttpClient();
         }
 
-        if (!services.Any(x => x.ServiceType == typeof(ILoggerFactory)))
+        if (services.All(x => x.ServiceType != typeof(ILoggerFactory)))
         {
             services.AddLogging();
         }

@@ -12,7 +12,7 @@ public class ValidationResults
 {
     public InfoMessages[]? infoMessages { get; set; }
     public object[]? warningMessages { get; set; }
-    public object[]? errorMessages { get; set; }
+    public InfoMessages[]? errorMessages { get; set; }
     public string? status { get; set; }
 }
 

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using GeeSuthSoft.KSA.ZATCA.Exceptions;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services
 {
@@ -20,13 +21,13 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         : LoggerHelper(zatcaApiConfig, logger: logger), IZatcaOnboardingService
     {
         private readonly IZatcaApiConfig _zatcaApiConfig =
-            zatcaApiConfig ?? throw new ArgumentNullException(nameof(zatcaApiConfig));
+            zatcaApiConfig ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(zatcaApiConfig));
 
         private readonly IHttpClientFactory _httpClientFactory =
-            httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            httpClientFactory ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(httpClientFactory));
 
         private readonly ILogger<ZatcaOnboardingService> _logger =
-            logger ?? throw new ArgumentNullException(nameof(logger));
+            logger ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(logger));
 
 
         public CsrGenerationResultDto GenerateCsr(CsrGenerationDto csrGenerationDto,
@@ -48,11 +49,12 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                     PrivateKey = privateKey
                 };
             }
+            catch (GeeSuthSoftZatcaWorngUseException) {throw;}
             catch (Exception ex)
             {
                 LogZatcaError(ex.Message);
                 _logger.LogError(ex, "Error generating CSR");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
         }
 
@@ -91,17 +93,17 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             catch (HttpRequestException ex)
             {
                 LogZatcaError(ex, "Error occurred while sending request to ZATCA API");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
             catch (JsonException ex)
             {
                 LogZatcaError(ex, "Error occurred while deserializing ZATCA API response");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
             catch (Exception ex)
             {
                 LogZatcaError(ex, "Unexpected error occurred while getting CSID");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
         }
 
@@ -143,17 +145,17 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             catch (HttpRequestException ex)
             {
                 LogZatcaError(ex, "Error occurred while sending request to ZATCA API for PCSID");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
             catch (JsonException ex)
             {
                 LogZatcaError(ex, "Error occurred while deserializing ZATCA API response for PCSID");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
             catch (Exception ex)
             {
                 LogZatcaError(ex, "Unexpected error occurred while getting PCSID");
-                throw;
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
             }
         }
     }
