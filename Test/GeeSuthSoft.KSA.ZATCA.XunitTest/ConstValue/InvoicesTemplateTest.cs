@@ -13,7 +13,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue
                 ProfileID = "reporting:1.0",
                 ID = new ID("SME00010"),
                 UUID = "8e6000cf-1a98-4174-b3e7-b5d5954bc10d",
-                IssueDate = "2025-07-05",
+                IssueDate = DateTime.Now.ToString("yyyy-MM-dd"),
                 IssueTime = "01:41:08",
                 InvoiceTypeCode = new InvoiceTypeCode(InvoiceType.TaxInvoice, "0200000"),
                 DocumentCurrencyCode = "SAR",
