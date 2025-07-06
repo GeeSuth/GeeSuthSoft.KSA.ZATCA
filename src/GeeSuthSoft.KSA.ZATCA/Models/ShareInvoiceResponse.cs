@@ -1,6 +1,6 @@
-﻿namespace GeeSuthSoft.KSA.ZATCA.Dto;
+﻿namespace GeeSuthSoft.KSA.ZATCA.Models;
 
-public class ShareInvoiceResponseDto
+internal class ShareInvoiceResponse
 {
     public ValidationResults? validationResults { get; set; }
     public string? reportingStatus { get; set; }
@@ -8,7 +8,7 @@ public class ShareInvoiceResponseDto
     public SignedInvoiceResult? SignedInvoiceResult { get; set; }
 }
 
-public class ValidationResults
+internal class ValidationResults
 {
     public InfoMessages[]? infoMessages { get; set; }
     public object[]? warningMessages { get; set; }
@@ -16,7 +16,7 @@ public class ValidationResults
     public string? status { get; set; }
 }
 
-public class InfoMessages
+internal class InfoMessages
 {
     public string? type { get; set; }
     public string? code { get; set; }

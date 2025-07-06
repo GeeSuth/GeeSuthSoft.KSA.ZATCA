@@ -1,6 +1,6 @@
-﻿namespace GeeSuthSoft.KSA.ZATCA.Dto;
+﻿namespace GeeSuthSoft.KSA.ZATCA.Models;
 
-public class PCSIDInfoDto
+internal class PCSIDInfo
 {
     public string BinaryToken { get; set; } = null!;
     public string PCSIDSecret { get; set; } = null!;

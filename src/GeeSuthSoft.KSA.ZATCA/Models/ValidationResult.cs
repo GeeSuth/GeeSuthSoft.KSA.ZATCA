@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace GeeSuthSoft.KSA.ZATCA.Dto;
+namespace GeeSuthSoft.KSA.ZATCA.Models;
 
-public class ValidationResult
+internal class ValidationResult
 {
     [JsonProperty("status")]
     public string Status { get; set; }

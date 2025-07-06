@@ -1,5 +1,4 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace GeeSuthSoft.KSA.ZATCA.Helper;
 

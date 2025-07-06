@@ -1,10 +1,10 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using System.Text;
+﻿using System.Text;
+using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.Exceptions;
 
 // Base exception for all ZATCA-related errors
-public class GeeSuthSoftZatcaException : Exception
+internal class GeeSuthSoftZatcaException : Exception
 {
     public GeeSuthSoftZatcaException(string message) : base(message) { }
 
@@ -12,27 +12,27 @@ public class GeeSuthSoftZatcaException : Exception
 }
 
 // Exception for incorrect configuration
-public class GeeSuthSoftZatcaInCorrectConfigException : GeeSuthSoftZatcaException
+internal class GeeSuthSoftZatcaInCorrectConfigException : GeeSuthSoftZatcaException
 {
     public GeeSuthSoftZatcaInCorrectConfigException(string message)
         : base($"GS Incorrect configuration: {message}") { }
 }
 
-public class GeeSuthSoftZatcaWorngUseException : GeeSuthSoftZatcaException
+internal class GeeSuthSoftZatcaWorngUseException : GeeSuthSoftZatcaException
 {
     public GeeSuthSoftZatcaWorngUseException(string message)
         : base($"GS Wrong Use: {message}") { }
 }
 
 // Exception for unexpected errors
-public class GeeSuthSoftZatcaUnExpectedException : GeeSuthSoftZatcaException
+internal class GeeSuthSoftZatcaUnExpectedException : GeeSuthSoftZatcaException
 {
     public GeeSuthSoftZatcaUnExpectedException(Exception ex)
         : base($"GS Zatca Unexpected Error: {ex.Message}", ex) { }
 }
 
 // Exception for business rule errors
-public class GeeSuthSoftZatcaBusinessException : GeeSuthSoftZatcaException
+internal class GeeSuthSoftZatcaBusinessException : GeeSuthSoftZatcaException
 {
     public GeeSuthSoftZatcaBusinessException(List<DetailInfo> detailInfo)
         : base($"GS Zatca Business Errors:\n{FormatDetails(detailInfo)}") { }

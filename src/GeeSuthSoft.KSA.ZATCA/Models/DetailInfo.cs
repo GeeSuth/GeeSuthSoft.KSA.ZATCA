@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace GeeSuthSoft.KSA.ZATCA.Dto;
+namespace GeeSuthSoft.KSA.ZATCA.Models;
 
-public class DetailInfo
+internal class DetailInfo
 {
 
     [JsonProperty("status")]

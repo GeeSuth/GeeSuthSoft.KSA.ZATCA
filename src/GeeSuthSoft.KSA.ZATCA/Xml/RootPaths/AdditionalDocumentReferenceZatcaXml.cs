@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
 {
-    public class AdditionalDocumentReference
+    internal class AdditionalDocumentReference
     {
         [XmlElement(ElementName = "ID", Namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2")]
         public ID ID { get; set; }

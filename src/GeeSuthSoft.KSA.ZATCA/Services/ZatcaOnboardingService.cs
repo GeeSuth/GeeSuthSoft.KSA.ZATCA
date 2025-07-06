@@ -1,5 +1,4 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
+﻿using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using Microsoft.Extensions.Logging;
@@ -11,6 +10,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using GeeSuthSoft.KSA.ZATCA.Exceptions;
+using GeeSuthSoft.KSA.ZATCA.External;
+using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services
 {
@@ -30,24 +31,26 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             logger ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(logger));
 
 
-        public CsrGenerationResultDto GenerateCsr(CsrGenerationDto csrGenerationDto,
+        public GsCsrGenerationResultDto GenerateCsr(GsCsrGenerationDto csrGenerationDto,
             bool pemFormat = false)
         {
             try
             {
-                LogZatcaInfo($"Generate CSR : {csrGenerationDto.CommonName}");
+                var csrGeneration = csrGenerationDto.ToCsrGenerationResult();
+                
+                LogZatcaInfo($"Generate CSR : {csrGeneration.CommonName}");
                 
                 var csrGenerator = new GeneratorCsr();
                 var (generatedCsr, privateKey, errorMessages)
-                    = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, _zatcaApiConfig.Environment, pemFormat);
+                    = csrGenerator.GenerateCsrAndPrivateKey(csrGeneration, _zatcaApiConfig.Environment, pemFormat);
 
                 LogZatcaInfo($"Generated CSR : {generatedCsr}");
                 
-                return new CsrGenerationResultDto()
+                return new CsrGenerationResult()
                 {
                     Csr = generatedCsr,
                     PrivateKey = privateKey
-                };
+                }.ToCsrGenerationResult();
             }
             catch (GeeSuthSoftZatcaWorngUseException) {throw;}
             catch (Exception ex)
@@ -64,7 +67,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         /// <param name="GeneratedCsr"></param>
         /// <param name="otp"></param>
         /// <returns></returns>
-        public async Task<ZatcaResultDto> GetCSIDAsync(string GeneratedCsr, string? otp = "12345")
+        public async Task<GsZatcaResultDto> GetCSIDAsync(string GeneratedCsr, string? otp = "12345")
         {
             try
             {
@@ -86,9 +89,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                 response.EnsureSuccessStatusCode();
 
                 var resultContent = await response.Content.ReadAsStringAsync();
-                var zatcaResult = JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent);
+                var zatcaResult = JsonConvert.DeserializeObject<ZatcaResult>(resultContent);
 
-                return zatcaResult;
+                return zatcaResult.ToZatcaResult();
             }
             catch (HttpRequestException ex)
             {
@@ -113,7 +116,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         /// </summary>
         /// <param name="ComplanceZatcaResponse"></param>
         /// <returns></returns>
-        public async Task<ZatcaResultDto> GetPCSIDAsync(string CsidComplianceRequestId, string CsidBinarySecurityToken,
+        public async Task<GsZatcaResultDto> GetPCSIDAsync(string CsidComplianceRequestId, string CsidBinarySecurityToken,
             string CsidSecret)
         {
             try
@@ -139,8 +142,10 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                 //response.EnsureSuccessStatusCode();
 
                 var resultContent = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent) ??
+                var result = JsonConvert.DeserializeObject<ZatcaResult>(resultContent) ??
                        throw new Exception("ZATCA returned unexpected data");
+
+                return result.ToZatcaResult();
             }
             catch (HttpRequestException ex)
             {

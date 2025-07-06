@@ -1,10 +1,11 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Helper;
+﻿using GeeSuthSoft.KSA.ZATCA.Helper;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
 using GeeSuthSoft.KSA.ZATCA.Exceptions;
+using GeeSuthSoft.KSA.ZATCA.External;
+using GeeSuthSoft.KSA.ZATCA.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
@@ -23,8 +24,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
 
         //private readonly LoggerHelper Zatcalogger;
 
-        public async Task<ServerResult> ComplianceCheck(string ccsidBinaryToken, string ccsidSecret, ZatcaRequestApi requestApi)
+        public async Task<GsServerResultComplianceDto> ComplianceCheck(string ccsidBinaryToken, string ccsidSecret, GsZatcaRequestApiDto requestApiDto)
         {
+            var requestApi = requestApiDto.ZatcaRequestApi();
             LogZatcaInfo($"Compliance Check...{requestApi.uuid} Invoice");
             
             var client = _httpClientFactory.CreateClient();
@@ -41,7 +43,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                 //response.EnsureSuccessStatusCode();
 
                 
-                return JsonConvert.DeserializeObject<ServerResult>(resultContent);
+                var result = JsonConvert.DeserializeObject<ServerResult>(resultContent);
+                return result.ToServerResult();
             }
             catch (Exception ex)
             {
@@ -50,9 +53,10 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SendInvoiceToZatcaApi(ZatcaRequestApi zatcaRequestApi,
+        public async Task<HttpResponseMessage> SendInvoiceToZatcaApi(GsZatcaRequestApiDto requestApiDto,
             string pcsidBinaryToken, string pcsidSecret, bool isClearance)
         {
+            var zatcaRequestApi = requestApiDto.ZatcaRequestApi();
             LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice");
             
            try {

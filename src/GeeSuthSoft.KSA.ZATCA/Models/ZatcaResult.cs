@@ -1,6 +1,6 @@
-﻿namespace GeeSuthSoft.KSA.ZATCA.Dto
+﻿namespace GeeSuthSoft.KSA.ZATCA.Models
 {
-    public class ZatcaResultDto
+    internal class ZatcaResult
     {
         public string RequestID { get; set; }
         public string TokenType { get; set; }

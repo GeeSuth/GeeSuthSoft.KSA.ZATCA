@@ -1,10 +1,10 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
+﻿using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.Exceptions;
 
 public static class VaildateObjects
 {
-    public static void ValiDateZatcaResponse(this ShareInvoiceResponseDto? shareInvoiceResponseDto)      
+    internal static void ValiDateZatcaResponse(this ShareInvoiceResponse? shareInvoiceResponseDto)      
     {
         if(shareInvoiceResponseDto == null)
             throw new GeeSuthSoftZatcaException("Zatca Response Faild to Parse or is null");

@@ -1,6 +1,6 @@
-using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Generators;
+using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest.InternalService;
 
@@ -10,10 +10,10 @@ public class GenerateCrsInternalTest
         public void Generate_Crs_Test()
         {
 
-            var onboardingResult = new OnboardingResultDto();
+            var onboardingResult = new OnboardingResult();
 
 
-            var csrGenerationDto = new CsrGenerationDto
+            var csrGenerationDto = new CsrGeneration
             {
                 CommonName = "TST-886431145-399999999900003",
                 SerialNumber = "1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f",

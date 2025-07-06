@@ -1,7 +1,6 @@
-
-using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Helper;
+using GeeSuthSoft.KSA.ZATCA.Models;
 using GeeSuthSoft.KSA.ZATCA.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

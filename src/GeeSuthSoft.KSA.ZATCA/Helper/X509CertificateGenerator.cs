@@ -1,5 +1,4 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
+﻿using GeeSuthSoft.KSA.ZATCA.Enums;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.X509;
@@ -11,12 +10,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.Helper
 {
     internal class X509CertificateGenerator
     {
-        internal string CreateCertificate(CsrGenerationDto dto, AsymmetricCipherKeyPair ecKeyPair, bool isPemFormat, EnvironmentType environment)
+        internal string CreateCertificate(CsrGeneration dto, AsymmetricCipherKeyPair ecKeyPair, bool isPemFormat, EnvironmentType environment)
         {
             X509Name subject = CreateCertificateSubjectName(dto);
             X509Name san = CreateCertificateOtherAttributes(dto);
@@ -35,14 +35,14 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
         }
 
 
-        private X509Name CreateCertificateSubjectName(CsrGenerationDto dto)
+        private X509Name CreateCertificateSubjectName(CsrGeneration dto)
         {
             var list1 = new List<DerObjectIdentifier> { X509Name.C, X509Name.OU, X509Name.O, X509Name.CN };
             var list2 = new List<string> { dto.CountryName, dto.OrganizationUnitName, dto.OrganizationName, dto.CommonName };
             return new X509Name(list1.ToArray(), list2.ToArray());
         }
 
-        private X509Name CreateCertificateOtherAttributes(CsrGenerationDto dto)
+        private X509Name CreateCertificateOtherAttributes(CsrGeneration dto)
         {
             var list1 = new List<DerObjectIdentifier> { X509Name.Surname, X509Name.UID, X509Name.T, new DerObjectIdentifier("2.5.4.26"), X509Name.BusinessCategory };
             var list2 = new List<string> { dto.SerialNumber, dto.OrganizationIdentifier, dto.InvoiceType, dto.LocationAddress, dto.IndustryBusinessCategory };

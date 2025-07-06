@@ -1,4 +1,4 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
+﻿using GeeSuthSoft.KSA.ZATCA.Models;
 using GeeSuthSoft.KSA.ZATCA.Services;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.Shared;
@@ -70,7 +70,7 @@ public class ShareInvoiceZatcaTest(ServiceProviderFixture fixture) : IClassFixtu
     [Fact]
     public async Task ShareCorrectInvoiceTest()
     {
-        var pcsidTokens = new PCSIDInfoDto
+        var pcsidTokens = new PCSIDInfo
         {
             BinaryToken = AuthTest.PCSIDBinaryToken,
             PCSIDSecret = AuthTest.PCSIDSecret,
@@ -88,7 +88,7 @@ public class ShareInvoiceZatcaTest(ServiceProviderFixture fixture) : IClassFixtu
     [Fact]
     public Task ShareWrongInvoiceTest()
     {
-        var pcsidTokens = new PCSIDInfoDto
+        var pcsidTokens = new PCSIDInfo
         {
             BinaryToken = AuthTest.PCSIDBinaryToken,
             PCSIDSecret = AuthTest.PCSIDSecret,

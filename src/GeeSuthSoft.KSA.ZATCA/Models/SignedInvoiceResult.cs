@@ -1,6 +1,6 @@
-﻿namespace GeeSuthSoft.KSA.ZATCA.Dto
+﻿namespace GeeSuthSoft.KSA.ZATCA.Models
 {
-    public class SignedInvoiceResult
+    internal class SignedInvoiceResult
     {
         public string InvoiceHash { get; set; } = null!;
         public string Base64SignedInvoice { get; set; }= null!;
@@ -10,7 +10,7 @@
 
     }
 
-    public class ContentQR
+    internal class ContentQR
     {
         public string Base64QrCodeContent { get; set; }= null!;
     }

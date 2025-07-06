@@ -1,4 +1,4 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
+﻿using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.XunitTest.HelperTest;
 using System;

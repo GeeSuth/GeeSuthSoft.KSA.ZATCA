@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapOnBoarding();
 app.MapTestSimpleInvoiceApi();
 
 app.Run();

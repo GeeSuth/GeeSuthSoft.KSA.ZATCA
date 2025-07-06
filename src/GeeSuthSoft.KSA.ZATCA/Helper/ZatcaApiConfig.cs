@@ -1,11 +1,11 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
+﻿using GeeSuthSoft.KSA.ZATCA.Enums;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeeSuthSoft.KSA.ZATCA.Models;
 
 namespace GeeSuthSoft.KSA.ZATCA.Helper
 {

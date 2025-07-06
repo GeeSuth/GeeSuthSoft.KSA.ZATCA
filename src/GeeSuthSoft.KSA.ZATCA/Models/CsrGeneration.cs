@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace GeeSuthSoft.KSA.ZATCA.Dto
+namespace GeeSuthSoft.KSA.ZATCA.Models
 {
-    public class CsrGenerationDto
+    internal class CsrGeneration
     {
         public string CommonName { get; set; } //= "TST-886431145-399999999900003";
         public string SerialNumber { get; set; } //= "1-TST|2-TST|3-ed22f1d8-e6a2-1118-9b58-d9a8f11e445f";

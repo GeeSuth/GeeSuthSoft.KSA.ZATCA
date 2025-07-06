@@ -1,6 +1,6 @@
 using GeeSuthSoft.KSA.ZATCA.Enums;
 
-namespace GeeSuthSoft.KSA.ZATCA.Dto;
+namespace GeeSuthSoft.KSA.ZATCA.Models;
 
 public class ZatcaOptions
 {

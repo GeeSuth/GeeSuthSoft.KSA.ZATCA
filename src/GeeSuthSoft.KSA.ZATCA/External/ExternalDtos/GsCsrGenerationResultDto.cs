@@ -1,8 +1,7 @@
-namespace GeeSuthSoft.KSA.ZATCA.Dto;
+﻿namespace GeeSuthSoft.KSA.ZATCA;
 
-public class CsrGenerationResultDto
+public class GsCsrGenerationResultDto
 {
     public string? Csr { get; set; }
     public string? PrivateKey { get; set; }
-
 }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GeeSuthSoft.KSA.ZATCA.Dto
+﻿namespace GeeSuthSoft.KSA.ZATCA.Models
 {
-    public class OnboardingResultDto
+    internal class OnboardingResult
     {
         public string GeneratedCsr { get; set; }
         public string PrivateKey { get; set; }

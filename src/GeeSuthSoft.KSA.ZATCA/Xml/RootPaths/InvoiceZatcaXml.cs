@@ -14,7 +14,7 @@ using System.Xml.Serialization;
 namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
 {
     [XmlRoot(ElementName = "Invoice", Namespace = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2")]
-    public class Invoice
+    internal class Invoice
     {
 
         [XmlElement(ElementName = "ProfileID", Namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2")]
@@ -107,7 +107,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
     }
 
 
-    public class Attachment
+    internal class Attachment
     {
         [XmlElement(ElementName = "EmbeddedDocumentBinaryObject", Namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2")]
         public EmbeddedDocumentBinaryObject EmbeddedDocumentBinaryObject { get; set; }
@@ -115,7 +115,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
         public Attachment() { }
     }
 
-    public class EmbeddedDocumentBinaryObject
+    internal class EmbeddedDocumentBinaryObject
     {
         [XmlAttribute(AttributeName = "mimeCode")]
         public string MimeCode { get; set; } = "text/plain";
@@ -131,7 +131,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
         }
     }
 
-    public class Delivery
+    internal class Delivery
     {
         [XmlElement(ElementName = "ActualDeliveryDate", Namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2")]
         public string ActualDeliveryDate { get; set; }
@@ -141,7 +141,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
 
     }
 
-    public class Note
+    internal class Note
     {
 
         [XmlAttribute(AttributeName = "languageID")]
@@ -165,7 +165,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
 
     }
 
-    public class PaymentMeans
+    internal class PaymentMeans
     {
         [XmlElement(ElementName = "PaymentMeansCode", Namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2")]
         public string PaymentMeansCode { get; set; }

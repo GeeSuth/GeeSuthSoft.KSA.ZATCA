@@ -1,6 +1,6 @@
-﻿namespace GeeSuthSoft.KSA.ZATCA.Dto;
+﻿namespace GeeSuthSoft.KSA.ZATCA.Models;
 
-public class ZatcaRequestApi
+internal class ZatcaRequestApi
 {
     public string uuid { get; set; }= null!;
     public string invoiceHash { get; set; }= null!;

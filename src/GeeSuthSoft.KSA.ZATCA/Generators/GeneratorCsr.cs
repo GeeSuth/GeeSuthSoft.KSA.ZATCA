@@ -1,5 +1,4 @@
-﻿using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Enums;
+﻿using GeeSuthSoft.KSA.ZATCA.Enums;
 using GeeSuthSoft.KSA.ZATCA.Helper;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Crypto;
@@ -14,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GeeSuthSoft.KSA.ZATCA.Exceptions;
+using GeeSuthSoft.KSA.ZATCA.Models;
 
 [assembly: InternalsVisibleTo("GeeSuthSoft.KSA.ZATCA.XunitTest")]
 namespace GeeSuthSoft.KSA.ZATCA.Generators
@@ -25,20 +25,20 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
 
 
         public (string csr, string privateKey, List<string> errorMessages) GenerateCsrAndPrivateKey(
-            CsrGenerationDto csrGenerationDto, 
+            CsrGeneration csrGeneration, 
             EnvironmentType environment, 
             bool pemFormat = false)
         {
 
             List<string> errorMessages = new List<string>();
 
-            if (!csrGenerationDto.IsValid(out errorMessages))
+            if (!csrGeneration.IsValid(out errorMessages))
             {
                 throw new GeeSuthSoftZatcaWorngUseException("CSR configuration is not valid. Errors: " + string.Join(", ", errorMessages));
             }
 
             AsymmetricCipherKeyPair keyPair = GenerateKeyPair();
-            string csr = GenerateCertificate(csrGenerationDto, keyPair, environment, pemFormat);
+            string csr = GenerateCertificate(csrGeneration, keyPair, environment, pemFormat);
 
             string privateKey = GeneratePrivateKey(keyPair, pemFormat);
 
@@ -46,7 +46,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
         }
 
 
-        private string GenerateCertificate(CsrGenerationDto dto, AsymmetricCipherKeyPair keyPair, EnvironmentType environment, bool pemFormat = false)
+        private string GenerateCertificate(CsrGeneration dto, AsymmetricCipherKeyPair keyPair, EnvironmentType environment, bool pemFormat = false)
         {
             try
             {

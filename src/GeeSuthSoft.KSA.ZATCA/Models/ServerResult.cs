@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GeeSuthSoft.KSA.ZATCA.Dto
+namespace GeeSuthSoft.KSA.ZATCA.Models
 {
-    public class ServerResult
+    internal class ServerResult
     {
         [JsonProperty("requestType")]
         public string RequestType { get; set; }
