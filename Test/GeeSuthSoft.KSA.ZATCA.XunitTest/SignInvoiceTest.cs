@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Services;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
@@ -41,10 +42,15 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(
-                CsidComplianceRequestId: resultCSID.RequestID,
-                CsidBinarySecurityToken: resultCSID.BinarySecurityToken,
-                CsidSecret: resultCSID.Secret);
+            var pcsidRequest = new PCSIDRequestDto()
+            {
+                CsidComplianceRequestId = resultCSID.RequestID,
+                CsidBinarySecurityToken = resultCSID.BinarySecurityToken,
+                CsidSecret = resultCSID.Secret
+            };
+
+            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(pcsidRequest);
+  
 
 
             var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();

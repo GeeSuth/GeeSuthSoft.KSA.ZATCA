@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
 {
@@ -68,6 +69,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
         public string Ds { get; set; }
 
         [XmlAttribute(AttributeName = "Id")]
+        [JsonPropertyName("Id")]
         public string Id { get; set; }
 
         [XmlElement(Namespace = "http://www.w3.org/2000/09/xmldsig#")]
@@ -192,7 +194,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Xml.RootPaths
         public string SigningTime { get; set; }
 
         [XmlIgnore]
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public DateTime SigningDateTime
         {
             get => DateTime.TryParseExact(SigningTime, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result) ? result : DateTime.MinValue;

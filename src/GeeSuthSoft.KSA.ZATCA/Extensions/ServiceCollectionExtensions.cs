@@ -32,6 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IZatcaInvoiceService, ZatcaInvoiceService>();
         services.AddTransient<IZatcaOnboardingService, ZatcaOnboardingService>();
         services.AddTransient<IZatcaShareService, ZatcaShareService>();
+        services.AddTransient<IZatcaSignInvoiceService, ZatcaSignInvoiceService>();
         return services;
 
     }

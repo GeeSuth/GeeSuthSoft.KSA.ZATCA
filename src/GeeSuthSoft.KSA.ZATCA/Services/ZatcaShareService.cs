@@ -16,37 +16,35 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
     ILogger<ZatcaOnboardingService> logger) : LoggerHelper(zatcaApiConfig , logger: logger) , IZatcaShareService
 {
     
-    public async ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(Invoice invoiceObject, 
-        bool IsClearance,
-        PCSIDInfoDto tokens)
+    public async ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(ShareInvoiceRequestDto shareInvoiceRequestDto)
     {
         try
         {
-            if (!tokens.isValid)
+            if (!shareInvoiceRequestDto.tokens.isValid)
             {
                 throw new GeeSuthSoftZatcaInCorrectConfigException("Tokens are invalid");
             }
             
-            LogZatcaInfo($"Sharing Invoice : {invoiceObject.ID}");
+            LogZatcaInfo($"Sharing Invoice : {shareInvoiceRequestDto.invoiceObject.ID}");
         
-            var signedInvoice = new GeneratorInvoice(invoiceObject,
-                Encoding.UTF8.GetString(Convert.FromBase64String(tokens.BinaryToken)),
-                tokens.privateKey
+            var signedInvoice = new GeneratorInvoice(shareInvoiceRequestDto.invoiceObject,
+                Encoding.UTF8.GetString(Convert.FromBase64String(shareInvoiceRequestDto.tokens.BinaryToken)),
+                shareInvoiceRequestDto.tokens.privateKey
             ).GetSignedInvoiceResult();
         
-            LogZatcaInfo($"Signed Invoice : {invoiceObject.ID} , Hashed : {signedInvoice.InvoiceHash}");
+            LogZatcaInfo($"Signed Invoice : {shareInvoiceRequestDto.invoiceObject.ID} , Hashed : {signedInvoice.InvoiceHash}");
         
             var result = await _zatcaInvoiceService.SendInvoiceToZatcaApi(
                 zatcaRequestApi:signedInvoice.RequestApi,
-                PCSIDBinaryToken: tokens.BinaryToken,
-                PCSIDSecret : tokens.PCSIDSecret,
-                IsClearance);
+                PCSIDBinaryToken: shareInvoiceRequestDto.tokens.BinaryToken,
+                PCSIDSecret : shareInvoiceRequestDto.tokens.PCSIDSecret,
+                shareInvoiceRequestDto.IsClearance);
 
 
             LogZatcaInfo($"Sharing Invoice Response Status: {result.StatusCode}");
             if (result.StatusCode != HttpStatusCode.OK)
             {
-                LogZatcaInfo($"Sharing Invoice Id: {invoiceObject.ID} Response Not 200_OK Error Response : {await result.Content.ReadAsStringAsync()}");
+                LogZatcaInfo($"Sharing Invoice Id: {shareInvoiceRequestDto.invoiceObject.ID} Response Not 200_OK Error Response : {await result.Content.ReadAsStringAsync()}");
             }
 
             //result.EnsureSuccessStatusCode();

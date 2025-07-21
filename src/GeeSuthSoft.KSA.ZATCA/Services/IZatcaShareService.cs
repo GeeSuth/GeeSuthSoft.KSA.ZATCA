@@ -5,6 +5,6 @@ namespace GeeSuthSoft.KSA.ZATCA.Services;
 
 public interface IZatcaShareService
 {
-    ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(Invoice invoiceObject, bool IsClearance,PCSIDInfoDto tokens);
+    ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(ShareInvoiceRequestDto shareInvoiceRequestDto);
     
 }

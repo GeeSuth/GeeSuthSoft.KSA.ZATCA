@@ -36,6 +36,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             try
             {
                 LogZatcaInfo($"Generate CSR : {csrGenerationDto.CommonName}");
+
+                if (!csrGenerationDto.IsValid(out var errors))
+                {
+                    throw new GeeSuthSoftZatcaBusinessException(errors.ToArray());
+                }
                 
                 var csrGenerator = new GeneratorCsr();
                 var (generatedCsr, privateKey, errorMessages)
@@ -113,23 +118,22 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         /// </summary>
         /// <param name="ComplanceZatcaResponse"></param>
         /// <returns></returns>
-        public async Task<ZatcaResultDto> GetPCSIDAsync(string CsidComplianceRequestId, string CsidBinarySecurityToken,
-            string CsidSecret)
+        public async Task<ZatcaResultDto> GetPCSIDAsync(PCSIDRequestDto pcsidRequestDto)
         {
             try
             {
-                LogZatcaInfo($"Get PCSID By Compliance Request Id : {CsidComplianceRequestId}");
+                LogZatcaInfo($"Get PCSID By Compliance Request Id : {pcsidRequestDto.CsidComplianceRequestId}");
 
                 
                 using var _httpClient = _httpClientFactory.CreateClient();
-                var jsonContent = JsonConvert.SerializeObject(new {compliance_request_id = CsidComplianceRequestId});
+                var jsonContent = JsonConvert.SerializeObject(new {compliance_request_id = pcsidRequestDto.CsidComplianceRequestId});
 
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 _httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
                 _httpClient.DefaultRequestHeaders.Add("Accept-Version", "V2");
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(Encoding.ASCII.GetBytes($"{CsidBinarySecurityToken}:{CsidSecret}")));
+                    Convert.ToBase64String(Encoding.ASCII.GetBytes($"{pcsidRequestDto.CsidBinarySecurityToken}:{pcsidRequestDto.CsidSecret}")));
 
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(_zatcaApiConfig.ProductionCSIDUrl, content);

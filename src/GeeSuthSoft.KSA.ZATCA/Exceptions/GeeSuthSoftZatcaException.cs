@@ -39,13 +39,16 @@ public class GeeSuthSoftZatcaBusinessException : GeeSuthSoftZatcaException
 
     public GeeSuthSoftZatcaBusinessException(InfoMessages[] detailInfo)
         : base($"GS Zatca Business Errors:\n{FormatDetails(detailInfo)}") { }
+    
+    public GeeSuthSoftZatcaBusinessException(string[] errors)
+        : base($"GS Zatca Business Errors:\n{string.Join("\n\r",errors)}") { }
 
     private static string FormatDetails(IEnumerable<dynamic> details)
     {
         var sb = new StringBuilder();
         foreach (var detail in details)
         {
-            sb.AppendLine($"{detail.Code ?? detail.code} / {detail.Message ?? detail.message}");
+            sb.AppendLine($"{detail.code} / {detail.message}");
         }
         return sb.ToString();
     }

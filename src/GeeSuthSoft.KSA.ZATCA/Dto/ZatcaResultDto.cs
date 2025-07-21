@@ -9,4 +9,13 @@
         public string Secret { get; set; }
         public List<string> Errors { get; set; }
     }
+
+
+    public class PCSIDRequestDto
+    {
+       public string CsidComplianceRequestId { get; set; }
+       public string CsidBinarySecurityToken { get; set; } 
+       public string CsidSecret { get; set; }
+    }
+    
 }

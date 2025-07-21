@@ -34,8 +34,8 @@ public class GenerateCRsTest : IClassFixture<ServiceProviderFixture>
     {
 
         var csrGenerationDto = CompanyTemplateTest.CrsCompanyInfo("");
-        var exception = Assert.Throws<GeeSuthSoftZatcaWorngUseException>(() => _zatcaOnboardingService.GenerateCsr(csrGenerationDto));
-        Assert.Contains("CSR configuration is not valid. Errors:", exception.Message, StringComparison.OrdinalIgnoreCase);
+        var exception = Assert.Throws<GeeSuthSoftZatcaUnExpectedException>(() => _zatcaOnboardingService.GenerateCsr(csrGenerationDto));
+        Assert.Contains("Zatca Unexpected Error: GS Zatca Business Errors:\nCommon name is mandatory field", exception.Message, StringComparison.OrdinalIgnoreCase);
 
     }
 }

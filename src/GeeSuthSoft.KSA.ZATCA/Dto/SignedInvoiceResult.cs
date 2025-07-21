@@ -1,4 +1,6 @@
-﻿namespace GeeSuthSoft.KSA.ZATCA.Dto
+﻿using GeeSuthSoft.KSA.ZATCA.Xml.RootPaths;
+
+namespace GeeSuthSoft.KSA.ZATCA.Dto
 {
     public class SignedInvoiceResult
     {
@@ -13,5 +15,13 @@
     public class ContentQR
     {
         public string Base64QrCodeContent { get; set; }= null!;
+    }
+
+    public class SignedInvoiceRequestDto
+    {
+        public required Invoice Invoice { get; set; }
+        public required string BinaryToken { get; set; }
+        public required string Secret { get; set; }
+        
     }
 }

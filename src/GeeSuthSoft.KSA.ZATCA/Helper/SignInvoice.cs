@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GeeSuthSoft.KSA.ZATCA.Helper
 {
-    [Obsolete("Need to re-wrire", false)]
+    [Obsolete("Use DI version", true)]
     internal class SignInvoice
     {
         public SignedInvoiceResult GenerateSignedInvoice(Invoice invoiceObject, 

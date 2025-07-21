@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using GeeSuthSoft.KSA.ZATCA.Dto;
 using GeeSuthSoft.KSA.ZATCA.Generators;
 using GeeSuthSoft.KSA.ZATCA.Services;
 using GeeSuthSoft.KSA.ZATCA.XunitTest.ConstValue;
@@ -104,10 +105,15 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
 
 
-            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(
-                CsidComplianceRequestId: ZatcaResult.RequestID,
-                CsidBinarySecurityToken: ZatcaResult.BinarySecurityToken,
-                CsidSecret:  ZatcaResult.Secret);
+            
+            var pcsidRequest = new PCSIDRequestDto()
+            {
+                CsidComplianceRequestId = ZatcaResult.RequestID,
+                CsidBinarySecurityToken = ZatcaResult.BinarySecurityToken,
+                CsidSecret = ZatcaResult.Secret
+            };
+
+            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(pcsidRequest);
 
             Assert.NotNull(resultPCSID.BinarySecurityToken);
             Assert.NotNull(resultPCSID.Secret);
@@ -151,14 +157,19 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             Assert.NotNull(ResultCSID.Secret);
 
 
+            
+            
+            var pcsidRequest = new PCSIDRequestDto()
+            {
+                CsidComplianceRequestId = ResultCSID.RequestID,
+                CsidBinarySecurityToken = ResultCSID.BinarySecurityToken,
+                CsidSecret = ResultCSID.Secret
+            };
 
-            var ResultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(
-                CsidComplianceRequestId: ResultCSID.RequestID,
-                CsidBinarySecurityToken: ResultCSID.BinarySecurityToken,
-                CsidSecret: ResultCSID.Secret);
+            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(pcsidRequest);
 
-            Assert.NotNull(ResultPCSID.BinarySecurityToken);
-            Assert.NotNull(ResultPCSID.Secret);
+            Assert.NotNull(resultPCSID.BinarySecurityToken);
+            Assert.NotNull(resultPCSID.Secret);
 
 
 
@@ -166,14 +177,14 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();
 
             GeneratorInvoice generatorInvoice = new GeneratorInvoice(invoiceObject,
-            Encoding.UTF8.GetString(Convert.FromBase64String(ResultPCSID.BinarySecurityToken)),CsrGenerationResultDto.PrivateKey);
+            Encoding.UTF8.GetString(Convert.FromBase64String(resultPCSID.BinarySecurityToken)),CsrGenerationResultDto.PrivateKey);
 
             var signeed = generatorInvoice.GetSignedInvoiceResult();
 
 
             var reportInvoiceZatca = await _zatcaInvoiceService.SendInvoiceToZatcaApi(signeed.RequestApi,
-                PCSIDBinaryToken: ResultPCSID.BinarySecurityToken,
-                PCSIDSecret: ResultPCSID.Secret, false);
+                PCSIDBinaryToken: resultPCSID.BinarySecurityToken,
+                PCSIDSecret: resultPCSID.Secret, false);
 
 
             Assert.NotNull(reportInvoiceZatca);

@@ -13,11 +13,13 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
 
         private readonly IZatcaOnboardingService _zatcaOnboardingService;
         private readonly IZatcaInvoiceService _zatcaInvoiceService;
+        private readonly IZatcaSignInvoiceService _zatcaSignInvoiceService;
 
         public ComplianceTest(ServiceProviderFixture fixture)
         {
             _zatcaOnboardingService = fixture.ServiceProvider.GetRequiredService<IZatcaOnboardingService>();
             _zatcaInvoiceService = fixture.ServiceProvider.GetRequiredService<IZatcaInvoiceService>();
+            _zatcaSignInvoiceService = fixture.ServiceProvider.GetRequiredService<IZatcaSignInvoiceService>();  
         }
 
         [Fact]
@@ -61,20 +63,27 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             Assert.NotNull(ZatcaResult.Secret);
 
 
+            var pcsidRequest = new PCSIDRequestDto()
+            {
+                CsidComplianceRequestId = ZatcaResult.RequestID,
+                CsidBinarySecurityToken = ZatcaResult.BinarySecurityToken,
+                CsidSecret = ZatcaResult.Secret
+            };
 
-            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(
-                CsidComplianceRequestId: ZatcaResult.RequestID, 
-                CsidBinarySecurityToken: ZatcaResult.BinarySecurityToken, 
-                CsidSecret: ZatcaResult.Secret);
+            var resultPCSID = await _zatcaOnboardingService.GetPCSIDAsync(pcsidRequest);
 
 
             var invoiceObject = InvoicesTemplateTest.GetSimpleInvoice();
 
-            SignInvoice signInvoice = new SignInvoice();
 
-            var signed = signInvoice.GenerateSignedInvoice(invoiceObject,
-                BinaryToken: resultPCSID.BinarySecurityToken,
-                Secret: onboardingResult.PrivateKey);
+            var signInvoiceRequest = new SignedInvoiceRequestDto()
+            {
+                Invoice = invoiceObject,
+                Secret = onboardingResult.PrivateKey,
+                BinaryToken = resultPCSID.BinarySecurityToken
+            };
+            
+            var signed = _zatcaSignInvoiceService.GetSignedInvoice(signInvoiceRequest);
 
 
             Assert.NotNull(signed);

@@ -76,9 +76,14 @@ public class ShareInvoiceZatcaTest(ServiceProviderFixture fixture) : IClassFixtu
             PCSIDSecret = AuthTest.PCSIDSecret,
             privateKey = AuthTest.CrsPrivateKey
         };
-      
-        var resultShare = await _zatcaShareService.ShareInvoiceWithZatcaAsync(InvoicesTemplateTest.GetSimpleInvoice() ,
-            true, pcsidTokens);
+
+        var shareInvoiceRequest = new ShareInvoiceRequestDto()
+        {
+            invoiceObject = InvoicesTemplateTest.GetSimpleInvoice(),
+            tokens = pcsidTokens,
+            IsClearance = true
+        };
+        var resultShare = await _zatcaShareService.ShareInvoiceWithZatcaAsync(shareInvoiceRequest);
         
         Assert.True(resultShare.reportingStatus == "REPORTED");
         Assert.True(resultShare.validationResults?.errorMessages?.Length == 0,"Error validation return");
@@ -97,8 +102,12 @@ public class ShareInvoiceZatcaTest(ServiceProviderFixture fixture) : IClassFixtu
       
         Assert.ThrowsAnyAsync<NullReferenceException>(async () =>
         {
-            await _zatcaShareService.ShareInvoiceWithZatcaAsync(new() ,
-                true, pcsidTokens);
+            await _zatcaShareService.ShareInvoiceWithZatcaAsync(new ShareInvoiceRequestDto()
+            {
+                invoiceObject = new(),
+                tokens = pcsidTokens,
+                IsClearance = true
+            });
 
         });
         return Task.CompletedTask;

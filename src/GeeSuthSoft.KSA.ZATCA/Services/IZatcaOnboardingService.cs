@@ -6,6 +6,6 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
     {
         CsrGenerationResultDto GenerateCsr(CsrGenerationDto csrGenerationDto, bool pemFormat = false);
         Task<ZatcaResultDto> GetCSIDAsync(string GeneratedCsr, string? otp = "12345");
-        Task<ZatcaResultDto> GetPCSIDAsync(string CsidComplianceRequestId, string CsidBinarySecurityToken, string CsidSecret);
+        Task<ZatcaResultDto> GetPCSIDAsync(PCSIDRequestDto pcsidRequestDto);
     }
 }
