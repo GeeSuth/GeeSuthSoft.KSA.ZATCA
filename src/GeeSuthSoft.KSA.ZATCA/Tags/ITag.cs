@@ -11,7 +11,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Tags
     {
         int TagIndex;
         string value;
-        public ITag(int tag,string value)
+        public ITag(int tag, string value)
         {
             this.TagIndex = tag;
             this.value = value;
@@ -27,8 +27,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Tags
                  2- Count Arabic char only used regex and increase it * 2 
                  3- So I need to get count of space to add count to lenght but not increased 
                 */
-                return (Regex.Matches(this.value.Replace(" ",""), @"[ء-ي]").Count * 2+(this.value.Count(Char.IsWhiteSpace))).ToString("X2");
-                
+                return (Regex.Matches(this.value.Replace(" ", ""), @"[ء-ي]").Count * 2 + (this.value.Count(Char.IsWhiteSpace))).ToString("X2");
+
             }
 
             return this.value.Length.ToString("X2");
@@ -37,7 +37,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Tags
         public override string ToString()
         {
 
-           return $"{TagIndex.ToString("X2")}{GetLength()}{ToHex(this.value)}";
+            return $"{TagIndex.ToString("X2")}{GetLength()}{ToHex(this.value)}";
 
         }
 
@@ -53,8 +53,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Tags
             return sb.ToString();
         }
 
-       
 
-        
+
+
     }
 }

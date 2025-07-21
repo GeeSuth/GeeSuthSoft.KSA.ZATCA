@@ -1,0 +1,6 @@
+﻿services:
+  geesuthsoft.ksa.zatca.webapitest:
+    image: geesuthsoft.ksa.zatca.webapitest
+    build:
+      context: .
+      dockerfile: Test/GeeSuthSoft.KSA.ZATCA.WebApiTest/Dockerfile

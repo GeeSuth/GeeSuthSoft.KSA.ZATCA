@@ -1,32 +1,63 @@
 # GeeSuthSoft.KSA.ZATCA
-This Repository will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia 
-support .NET 7
 
 
 
-### Qr Code 
+## Overview
+GeeSuthSoft.KSA.ZATCA is a .NET library that helps developers integrate with ZATCA (Zakat, Tax and Customs Authority) requirements in Saudi Arabia. This library provides tools and utilities for e-invoicing compliance.
 
-#### Use :
+## Features
+- Generate CSR (Certificate Signing Request) for ZATCA compliance
+- Handle ZATCA onboarding process
+- Generate Compliance certificate and secret (CCSID)
+- Generate Production certificate and secret (PCSID)
+- Share and validate e-invoices with ZATCA
+- Support Production and Non-Production , Simulation environments
+- Built for .NET 7
 
-~~Install `Install-Package GeeSuthSoft.KSA.ZATCA -Version 1.0.0`~~
+## Installation
+Install via NuGet Package Manager:
 
-after add `GeeSuthSoft.KSA.ZATCA.dll` to your project
+```bash
+dotnet add package GeeSuthSoft.KSA.ZATCA
+```
 
-call it `using GeeSuthSoft.KSA.ZATCA.Qr;`
+## Configuration
 
-the result of checking Qrcode(Generated from this Library) by [ZATCA](https://zatca.gov.sa/en/E-Invoicing/SystemsDevelopers/ComplianceEnablementToolbox/Pages/DownloadSDK.aspx)
-
-![image](https://user-images.githubusercontent.com/10328974/143316390-370ed783-7ec1-4d0e-b4ae-fbb1abb0fcbf.png)
-
-As like what you see, we can say this working very well
+Add the ZATCA service to your dependency injection container in `Program.cs` or `Startup.cs`:
 
 
-##### Methods:
-`GetBase64()` => 'Get QrCode  in Base64 string to use'
+```csharp
 
-`GetBase64InUrl()` => 'Get QrCode in Base64 string can be opened in browser just past result in url '
+using GeeSuthSoft.KSA.ZATCA.Extensions;
 
-`GetImage()` => 'Get QrCode In Image object'
+
+services.AddZatca(options =>
+            {
+                options.ZatcaBaseUrl = "https://gw-fatoora.zatca.gov.sa";
+                options.Environment = EnvironmentType.NonProduction;
+                options.LogRequestAndResponse = true;
+            });
+```
+
+## Usage
+
+### OnBoarding Service
+
+```csharp
+IZatcaOnboardingService
+```
+
+
+### Sharing Service
+
+```csharp
+IZatcaShareService
+```
+
+
+
+
+
 
 
 ### Result of ZATCA app :
