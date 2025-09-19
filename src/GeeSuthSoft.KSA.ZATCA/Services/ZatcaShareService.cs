@@ -15,7 +15,7 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
     IZatcaApiConfig zatcaApiConfig,
     ILogger<ZatcaOnboardingService> logger) : LoggerHelper(zatcaApiConfig , logger: logger) , IZatcaShareService
 {
-    
+
     public async ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(ShareInvoiceRequestDto shareInvoiceRequestDto)
     {
         try
@@ -24,21 +24,23 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
             {
                 throw new GeeSuthSoftZatcaInCorrectConfigException("Tokens are invalid");
             }
-            
+
             LogZatcaInfo($"Sharing Invoice : {shareInvoiceRequestDto.invoiceObject.ID}");
-        
+
             var signedInvoice = new GeneratorInvoice(shareInvoiceRequestDto.invoiceObject,
                 Encoding.UTF8.GetString(Convert.FromBase64String(shareInvoiceRequestDto.tokens.BinaryToken)),
                 shareInvoiceRequestDto.tokens.privateKey
             ).GetSignedInvoiceResult();
-        
+
             LogZatcaInfo($"Signed Invoice : {shareInvoiceRequestDto.invoiceObject.ID} , Hashed : {signedInvoice.InvoiceHash}");
-        
+
             var result = await _zatcaInvoiceService.SendInvoiceToZatcaApi(
-                zatcaRequestApi:signedInvoice.RequestApi,
+                zatcaRequestApi: signedInvoice.RequestApi,
                 PCSIDBinaryToken: shareInvoiceRequestDto.tokens.BinaryToken,
-                PCSIDSecret : shareInvoiceRequestDto.tokens.PCSIDSecret,
-                shareInvoiceRequestDto.IsClearance);
+                PCSIDSecret: shareInvoiceRequestDto.tokens.PCSIDSecret,
+                shareInvoiceRequestDto.IsClearance,
+                shareInvoiceRequestDto.EnableClearanceStatus
+                );
 
 
             LogZatcaInfo($"Sharing Invoice Response Status: {result.StatusCode}");
@@ -48,16 +50,16 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
             }
 
             //result.EnsureSuccessStatusCode();
-            
+
             var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
             response.ValiDateZatcaResponse();
-            
+
             response.SignedInvoiceResult = signedInvoice;
             return response;
         }
         catch (Exception ex)
         {
-            LogZatcaError(ex,"Error with sharing invoice, the ZATCA response not as expected");
+            LogZatcaError(ex, "Error with sharing invoice, the ZATCA response not as expected");
             throw new GeeSuthSoftZatcaUnExpectedException(ex);
         }
     }

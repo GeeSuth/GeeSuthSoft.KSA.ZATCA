@@ -15,7 +15,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         IHttpClientFactory httpClientFactory,
         ILogger<ZatcaInvoiceService> logger,
         IZatcaApiConfig zatcaApiConfig)
-        : LoggerHelper(zatcaApiConfig , logger: logger), IZatcaInvoiceService
+        : LoggerHelper(zatcaApiConfig, logger: logger), IZatcaInvoiceService
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         private readonly ILogger<ZatcaInvoiceService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -26,7 +26,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
         public async Task<ServerResult> ComplianceCheck(string ccsidBinaryToken, string ccsidSecret, ZatcaRequestApi requestApi)
         {
             LogZatcaInfo($"Compliance Check...{requestApi.uuid} Invoice");
-            
+
             var client = _httpClientFactory.CreateClient();
             ConfigureHttpClient(client, ccsidBinaryToken, ccsidSecret);
 
@@ -36,11 +36,11 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             {
                 var response = await client.PostAsync(_zatcaApiConfig.ComplianceCheckUrl, content);
                 var resultContent = await response.Content.ReadAsStringAsync();
-                
+
                 LogZatcaInfo($"Complianced Check...[{requestApi.uuid}] Invoice, ResponseCode: [{response.StatusCode}], ResponseBody: [{resultContent}]");
                 //response.EnsureSuccessStatusCode();
 
-                
+
                 return JsonConvert.DeserializeObject<ServerResult>(resultContent);
             }
             catch (Exception ex)
@@ -50,43 +50,47 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SendInvoiceToZatcaApi(ZatcaRequestApi zatcaRequestApi,
-            string pcsidBinaryToken, string pcsidSecret, bool isClearance)
+        public async Task<HttpResponseMessage> SendInvoiceToZatcaApi(
+           ZatcaRequestApi zatcaRequestApi,
+           string pcsidBinaryToken,
+           string pcsidSecret,
+           bool isClearance,
+           bool enableClearanceStatus = false)
         {
-            LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice");
-            
-           try {
-            var client = _httpClientFactory.CreateClient();
-            ConfigureHttpClient(client, pcsidBinaryToken, pcsidSecret, isClearance);
+            LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice " +
+                         $"{(isClearance ? "(Standard - Clearance)" : $"(Simplified - Reporting, Clearance-Status: {(enableClearanceStatus ? "1" : "0")})")}");
 
-            var content = new StringContent(JsonConvert.SerializeObject(zatcaRequestApi), Encoding.UTF8, "application/json");
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                ConfigureHttpClient(client, pcsidBinaryToken, pcsidSecret, enableClearanceStatus);
 
-            var response = await client.PostAsync(_zatcaApiConfig.ReportingUrl, content);
-            
-            LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice, ResponseCode: {response.StatusCode}");
+                var content = new StringContent(JsonConvert.SerializeObject(zatcaRequestApi), Encoding.UTF8, "application/json");
 
-            //response.EnsureSuccessStatusCode();
-            return response;
-           }
-           catch (Exception ex)
-           {
-               LogZatcaError(ex, "Error during compliance check");
-               throw new GeeSuthSoftZatcaUnExpectedException(ex);
-           }
+                // Select the appropriate endpoint based on isClearance
+                var endpoint = isClearance ? _zatcaApiConfig.ClearanceUrl : _zatcaApiConfig.ReportingUrl;
+
+                var response = await client.PostAsync(endpoint, content);
+
+                LogZatcaInfo($"Sent Invoice...{zatcaRequestApi.uuid} Invoice, Endpoint: {endpoint}, " +
+                             $"ResponseCode: {response.StatusCode}, ResponseBody: {await response.Content.ReadAsStringAsync()}");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                LogZatcaError(ex, $"Error sending invoice {zatcaRequestApi.uuid} to ZATCA");
+                throw new GeeSuthSoftZatcaUnExpectedException(ex);
+            }
         }
 
-        private void ConfigureHttpClient(HttpClient client, string binaryToken, string secret, bool? isClearance = null)
+        private void ConfigureHttpClient(HttpClient client, string binaryToken, string secret, bool enableClearanceStatus = false)
         {
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
             client.DefaultRequestHeaders.Add("Accept-Version", "V2");
-            
-            if (isClearance.HasValue)
-            {
-                client.DefaultRequestHeaders.Add("Clearance-Status", isClearance.Value ? "1" : "0");
-            }
-
+            client.DefaultRequestHeaders.Add("Clearance-Status", enableClearanceStatus ? "1" : "0");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(Encoding.ASCII.GetBytes($"{binaryToken}:{secret}")));
         }
