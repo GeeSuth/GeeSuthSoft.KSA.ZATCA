@@ -31,6 +31,7 @@ public class ShareInvoiceRequestDto
 {
     public required Invoice invoiceObject { get; set; } 
     public bool IsClearance { get; set; }
+    public bool EnableClearanceStatus { get; set; }
     public required PCSIDInfoDto tokens { get; set; }
     
 }
