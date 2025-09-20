@@ -61,7 +61,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(zatcaRequestApi), Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync(_zatcaApiConfig.ReportingUrl, content);
+            var response = await client.PostAsync(isClearance? _zatcaApiConfig.ClearanceUrl : _zatcaApiConfig.ReportingUrl, content);
             
             LogZatcaInfo($"Sending Invoice...{zatcaRequestApi.uuid} Invoice, ResponseCode: {response.StatusCode}");
 
