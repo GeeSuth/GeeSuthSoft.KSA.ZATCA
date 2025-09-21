@@ -6,6 +6,8 @@ public class ShareInvoiceResponseDto
 {
     public ValidationResults? validationResults { get; set; }
     public string? reportingStatus { get; set; }
+    public string? clearedInvoice { get; set; }
+    public string? clearanceStatus { get; set; }
     
     public SignedInvoiceResult? SignedInvoiceResult { get; set; }
 }
