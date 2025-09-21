@@ -7,6 +7,9 @@
     <Version>8.0.0</Version>
     <AssemblyVersion>8.0</AssemblyVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>GeeSuthSoft</Authors>
+    <Description>An Unofficial Library, This Library will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia</Description>
+    <RepositoryUrl>https://github.com/GeeSuth/GeeSuthSoft.KSA.ZATCA</RepositoryUrl>
   </PropertyGroup>
   
   <ItemGroup>
