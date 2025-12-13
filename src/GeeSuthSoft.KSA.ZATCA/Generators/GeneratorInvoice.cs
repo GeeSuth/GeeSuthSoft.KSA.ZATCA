@@ -29,8 +29,8 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
 
                 
 
-            if (InvoiceObject.InvoiceTypeCode.Name.StartsWith("02"))
-            {
+            //if (InvoiceObject.InvoiceTypeCode.Name.StartsWith("02"))
+            //{
 
                 byte[] certificateBytes = Encoding.UTF8.GetBytes(X509CertificateContent);
                 X509Certificate2 parsedCertificate = new(certificateBytes);
@@ -70,7 +70,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
 
                 CleanInvoice = CleanInvoice.Insert(AccountingSupplierPartyIndex - 6, stringXMLSignature);
 
-            }
+            //}
 
             byte[] bytes = Encoding.UTF8.GetBytes(CleanInvoice);
             result.Base64SignedInvoice = Convert.ToBase64String(bytes);
