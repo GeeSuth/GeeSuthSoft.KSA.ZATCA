@@ -21,7 +21,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Dto
     {
         public required Invoice Invoice { get; set; }
         public required string BinaryToken { get; set; }
-        public required string Secret { get; set; }
+        public required string PrivateKey { get; set; }
         
     }
 }

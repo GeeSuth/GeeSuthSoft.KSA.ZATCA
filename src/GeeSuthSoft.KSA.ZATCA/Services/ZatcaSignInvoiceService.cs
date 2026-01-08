@@ -16,15 +16,13 @@ public class ZatcaSignInvoiceService (ILogger<ZatcaInvoiceService> logger,
     {
         try
         {
-
-            GeneratorInvoice ig = new(
-                InvoiceSign.Invoice,
+            
+             return new GeneratorInvoice(InvoiceSign.Invoice,
                 Encoding.UTF8.GetString(Convert.FromBase64String(InvoiceSign.BinaryToken)),
-                InvoiceSign.Secret
-            );
+                InvoiceSign.PrivateKey
+            ).GetSignedInvoiceResult();
+             
 
-            return ig.GetSignedInvoiceXML();
-                
         }
         catch (Exception ex)
         {

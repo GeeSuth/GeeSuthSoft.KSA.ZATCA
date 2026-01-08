@@ -36,3 +36,5 @@ public class ShareInvoiceRequestDto
     public required PCSIDInfoDto tokens { get; set; }
     
 }
+
+public record ShareReadyInvoiceRequestDto(ZatcaRequestApi zatcaRequestApi, string BinaryToken, string PCSIDSecret);

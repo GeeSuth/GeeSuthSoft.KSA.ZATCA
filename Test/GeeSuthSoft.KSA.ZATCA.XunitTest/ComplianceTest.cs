@@ -79,7 +79,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest
             var signInvoiceRequest = new SignedInvoiceRequestDto()
             {
                 Invoice = invoiceObject,
-                Secret = onboardingResult.PrivateKey,
+                PrivateKey = onboardingResult.PrivateKey,
                 BinaryToken = resultPCSID.BinarySecurityToken
             };
             
