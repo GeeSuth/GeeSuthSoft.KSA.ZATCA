@@ -41,20 +41,20 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                 {
                     throw new GeeSuthSoftZatcaBusinessException(errors.ToArray());
                 }
-                
+
                 var csrGenerator = new GeneratorCsr();
                 var (generatedCsr, privateKey, errorMessages)
                     = csrGenerator.GenerateCsrAndPrivateKey(csrGenerationDto, _zatcaApiConfig.Environment, pemFormat);
 
                 LogZatcaInfo($"Generated CSR : {generatedCsr}");
-                
+
                 return new CsrGenerationResultDto()
                 {
                     Csr = generatedCsr,
                     PrivateKey = privateKey
                 };
             }
-            catch (GeeSuthSoftZatcaWorngUseException) {throw;}
+            catch (GeeSuthSoftZatcaWorngUseException) { throw; }
             catch (Exception ex)
             {
                 LogZatcaError(ex.Message);
@@ -74,9 +74,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             try
             {
                 LogZatcaInfo($"Get CSID : {GeneratedCsr}");
-                
+
                 using var _httpClient = _httpClientFactory.CreateClient();
-                var jsonContent = JsonConvert.SerializeObject(new {csr = GeneratedCsr});
+                var jsonContent = JsonConvert.SerializeObject(new { csr = GeneratedCsr });
 
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -87,13 +87,17 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(_zatcaApiConfig.ComplianceCSIDUrl, content);
 
-                LogZatcaInfo($"Get CSID Response Status Code: {response.StatusCode}");
-                response.EnsureSuccessStatusCode();
-
                 var resultContent = await response.Content.ReadAsStringAsync();
-                var zatcaResult = JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent);
 
-                return zatcaResult;
+                LogZatcaInfo($"Get CSID Response Status Code: {response.StatusCode}, Response: {resultContent}");
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var zatcaResult = JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent);
+                    return zatcaResult;
+                }
+
+                throw new GeeSuthSoftZatcaException(resultContent);
+
             }
             catch (HttpRequestException ex)
             {
@@ -124,9 +128,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
             {
                 LogZatcaInfo($"Get PCSID By Compliance Request Id : {pcsidRequestDto.CsidComplianceRequestId}");
 
-                
+
                 using var _httpClient = _httpClientFactory.CreateClient();
-                var jsonContent = JsonConvert.SerializeObject(new {compliance_request_id = pcsidRequestDto.CsidComplianceRequestId});
+                var jsonContent = JsonConvert.SerializeObject(new { compliance_request_id = pcsidRequestDto.CsidComplianceRequestId });
 
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -139,12 +143,17 @@ namespace GeeSuthSoft.KSA.ZATCA.Services
                 var response = await _httpClient.PostAsync(_zatcaApiConfig.ProductionCSIDUrl, content);
 
                 LogZatcaInfo($"Get PCSID Response Status Code: {response.StatusCode}");
-                
-                //response.EnsureSuccessStatusCode();
 
                 var resultContent = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent) ??
-                       throw new Exception("ZATCA returned unexpected data");
+
+                LogZatcaInfo($"Get PCSID Response Status Code: {response.StatusCode}, Response: {resultContent}");
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var zatcaResult = JsonConvert.DeserializeObject<ZatcaResultDto>(resultContent);
+                    return zatcaResult;
+                }
+
+                throw new GeeSuthSoftZatcaException(resultContent);
             }
             catch (HttpRequestException ex)
             {

@@ -4,8 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>8.0.0</Version>
-    <AssemblyVersion>8.0</AssemblyVersion>
+    <Version>8.5.0</Version>
+    <AssemblyVersion>8.5</AssemblyVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>GeeSuthSoft</Authors>
     <Description>An Unofficial Library, This Library will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia</Description>

@@ -61,4 +61,42 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
             throw new GeeSuthSoftZatcaUnExpectedException(ex);
         }
     }
+
+    public async ValueTask<ShareInvoiceResponseDto> ReportingInvoiceToZatcaAsync(ZatcaRequestApi zatcaRequestApi, string BinaryToken, string PCSIDSecret)
+    {
+        try
+        {
+            if (zatcaRequestApi is null || string.IsNullOrEmpty(zatcaRequestApi.invoice))
+            {
+                throw new GeeSuthSoftZatcaInCorrectConfigException("Invoice is invalid");
+            }
+
+            LogZatcaInfo($"Sharing Invoice : {zatcaRequestApi.uuid}");
+
+            var result = await _zatcaInvoiceService.SendInvoiceToZatcaApi(
+                zatcaRequestApi: zatcaRequestApi,
+                PCSIDBinaryToken: BinaryToken,
+                PCSIDSecret: PCSIDSecret,
+                IsClearance: false);
+
+
+            LogZatcaInfo($"Sharing Invoice Response Status: {result.StatusCode}");
+            if (result.StatusCode != HttpStatusCode.OK)
+            {
+                LogZatcaInfo($"Sharing Invoice Id: {zatcaRequestApi.uuid} Response Not 200_OK Error Response : {await result.Content.ReadAsStringAsync()}");
+            }
+
+            //result.EnsureSuccessStatusCode();
+
+            var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
+            response.ValiDateZatcaResponse();
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            LogZatcaError(ex, "Error with sharing invoice, the ZATCA response not as expected");
+            throw new GeeSuthSoftZatcaUnExpectedException(ex);
+        }
+    }
 }
