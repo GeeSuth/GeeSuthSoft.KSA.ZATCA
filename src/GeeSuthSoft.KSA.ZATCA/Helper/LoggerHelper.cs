@@ -3,38 +3,47 @@ using Microsoft.Extensions.Logging;
 
 namespace GeeSuthSoft.KSA.ZATCA.Helper;
 
-public abstract class LoggerHelper(IZatcaApiConfig zatcaApiConfig, ILogger logger)
+public abstract class LoggerHelper
 {
+    private readonly IZatcaApiConfig _zatcaApiConfig;
+    private readonly ILogger _logger;
+
+    protected LoggerHelper(IZatcaApiConfig zatcaApiConfig, ILogger logger)
+    {
+        _zatcaApiConfig = zatcaApiConfig;
+        _logger = logger;
+    }
+
     protected void LogZatcaInfo(string message)
     {
-        if (zatcaApiConfig.LogsEnabled)
+        if (_zatcaApiConfig.LogsEnabled)
         {
-            logger.LogInformation($"ZATCA INFO: {message}");
+            _logger.LogInformation($"ZATCA INFO: {message}");
         }
     }
     
     
     protected void LogZatcaError(string message)
     {
-        if (zatcaApiConfig.LogsEnabled)
+        if (_zatcaApiConfig.LogsEnabled)
         {
-            logger.LogError($"ZATCA ERROR: {message}");
+            _logger.LogError($"ZATCA ERROR: {message}");
         }
     }
     
     protected void LogZatcaError(Exception ex, string? message = "")
     {
-        if (zatcaApiConfig.LogsEnabled)
+        if (_zatcaApiConfig.LogsEnabled)
         {
-            logger.LogError(ex, $"ZATCA ERROR: {message??""}");
+            _logger.LogError(ex, $"ZATCA ERROR: {message??""}");
         }
     }
     
     protected void LogZatcaWarning(string message)
     {
-        if (zatcaApiConfig.LogsEnabled)
+        if (_zatcaApiConfig.LogsEnabled)
         {
-            logger.LogWarning($"ZATCA WARN: {message}");
+            _logger.LogWarning($"ZATCA WARN: {message}");
         }
     }
 }

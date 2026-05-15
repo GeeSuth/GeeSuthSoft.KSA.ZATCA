@@ -11,10 +11,16 @@ using Microsoft.Extensions.Logging;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services;
 
-public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
-    IZatcaApiConfig zatcaApiConfig,
-    ILogger<ZatcaOnboardingService> logger) : LoggerHelper(zatcaApiConfig , logger: logger) , IZatcaShareService
+public class ZatcaShareService : LoggerHelper, IZatcaShareService
 {
+    private readonly IZatcaInvoiceService _zatcaInvoiceService;
+
+    public ZatcaShareService(IZatcaInvoiceService zatcaInvoiceService,
+        IZatcaApiConfig zatcaApiConfig,
+        ILogger<ZatcaOnboardingService> logger) : base(zatcaApiConfig, logger)
+    {
+        _zatcaInvoiceService = zatcaInvoiceService;
+    }
     
     public async ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(ShareInvoiceRequestDto shareInvoiceRequestDto)
     {

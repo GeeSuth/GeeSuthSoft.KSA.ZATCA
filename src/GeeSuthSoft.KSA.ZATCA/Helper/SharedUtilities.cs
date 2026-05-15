@@ -135,7 +135,10 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
 
         internal static byte[] HashSha256(string rawData)
         {
-            return SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
+            using (var sha256 = SHA256.Create())
+            {
+                return sha256.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+            }
         }
 
         //https://zatca1.discourse.group/t/signed-and-reported-b2c-xmls-not-validated-with-web-based-validator/1376/3?u=ecloud
@@ -269,7 +272,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
                                     </xades:SignedSignatureProperties>
                                 </xades:SignedProperties>".Replace("\r\n", "\n");  // Normalize line endings to LF only
 
-            byte[] hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(xmlString.Trim()));
+            byte[] hashBytes = HashSha256(xmlString.Trim());
             string hashHex = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(hashHex));
         }

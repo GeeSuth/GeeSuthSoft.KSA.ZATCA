@@ -14,20 +14,22 @@ using GeeSuthSoft.KSA.ZATCA.Exceptions;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services
 {
-    public class ZatcaOnboardingService(
-        IZatcaApiConfig zatcaApiConfig,
-        IHttpClientFactory httpClientFactory,
-        ILogger<ZatcaOnboardingService> logger)
-        : LoggerHelper(zatcaApiConfig, logger: logger), IZatcaOnboardingService
+    public class ZatcaOnboardingService : LoggerHelper, IZatcaOnboardingService
     {
-        private readonly IZatcaApiConfig _zatcaApiConfig =
-            zatcaApiConfig ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(zatcaApiConfig));
+        private readonly IZatcaApiConfig _zatcaApiConfig;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<ZatcaOnboardingService> _logger;
 
-        private readonly IHttpClientFactory _httpClientFactory =
-            httpClientFactory ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(httpClientFactory));
-
-        private readonly ILogger<ZatcaOnboardingService> _logger =
-            logger ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(logger));
+        public ZatcaOnboardingService(
+            IZatcaApiConfig zatcaApiConfig,
+            IHttpClientFactory httpClientFactory,
+            ILogger<ZatcaOnboardingService> logger)
+            : base(zatcaApiConfig, logger)
+        {
+            _zatcaApiConfig = zatcaApiConfig ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(zatcaApiConfig));
+            _httpClientFactory = httpClientFactory ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(httpClientFactory));
+            _logger = logger ?? throw new GeeSuthSoftZatcaInCorrectConfigException(nameof(logger));
+        }
 
 
         public CsrGenerationResultDto GenerateCsr(CsrGenerationDto csrGenerationDto,

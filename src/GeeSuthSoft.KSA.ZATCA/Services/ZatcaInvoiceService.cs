@@ -11,15 +11,22 @@ using Microsoft.Extensions.Logging;
 namespace GeeSuthSoft.KSA.ZATCA.Services
 {
 
-    public class ZatcaInvoiceService(
-        IHttpClientFactory httpClientFactory,
-        ILogger<ZatcaInvoiceService> logger,
-        IZatcaApiConfig zatcaApiConfig)
-        : LoggerHelper(zatcaApiConfig , logger: logger), IZatcaInvoiceService
+    public class ZatcaInvoiceService : LoggerHelper, IZatcaInvoiceService
     {
-        private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-        private readonly ILogger<ZatcaInvoiceService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        private readonly IZatcaApiConfig _zatcaApiConfig = zatcaApiConfig ?? throw new ArgumentNullException(nameof(zatcaApiConfig));
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<ZatcaInvoiceService> _logger;
+        private readonly IZatcaApiConfig _zatcaApiConfig;
+
+        public ZatcaInvoiceService(
+            IHttpClientFactory httpClientFactory,
+            ILogger<ZatcaInvoiceService> logger,
+            IZatcaApiConfig zatcaApiConfig)
+            : base(zatcaApiConfig, logger)
+        {
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _zatcaApiConfig = zatcaApiConfig ?? throw new ArgumentNullException(nameof(zatcaApiConfig));
+        }
 
         //private readonly LoggerHelper Zatcalogger;
 

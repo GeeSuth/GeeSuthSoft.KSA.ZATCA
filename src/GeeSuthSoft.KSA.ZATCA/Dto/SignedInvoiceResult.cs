@@ -19,9 +19,9 @@ namespace GeeSuthSoft.KSA.ZATCA.Dto
 
     public class SignedInvoiceRequestDto
     {
-        public required Invoice Invoice { get; set; }
-        public required string BinaryToken { get; set; }
-        public required string PrivateKey { get; set; }
+        public Invoice Invoice { get; set; } = null!;
+        public string BinaryToken { get; set; } = null!;
+        public string PrivateKey { get; set; } = null!;
         
     }
 }
