@@ -29,6 +29,16 @@ public class GeeSuthSoftZatcaUnExpectedException : GeeSuthSoftZatcaException
 {
     public GeeSuthSoftZatcaUnExpectedException(Exception ex)
         : base($"GS Zatca Unexpected Error: {ex.Message}", ex) { }
+
+    public GeeSuthSoftZatcaUnExpectedException(string message)
+      : base($"GS Zatca Unexpected Error: {message}") { }
+}
+
+
+public class GeeSuthSoftZatcaUnauthorizedException : GeeSuthSoftZatcaException
+{
+    public GeeSuthSoftZatcaUnauthorizedException(string message)
+        : base($"GS Zatca Unauthorized: {message}") { }
 }
 
 // Exception for business rule errors
