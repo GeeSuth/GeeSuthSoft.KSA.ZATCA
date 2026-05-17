@@ -87,7 +87,7 @@ public class ZatcaShareService : LoggerHelper, IZatcaShareService
 
 
             LogZatcaInfo($"Sharing Invoice Response Status: {result.StatusCode}");
-            if (result.StatusCode == HttpStatusCode.OK)
+            if (result.StatusCode == HttpStatusCode.OK || result.StatusCode == HttpStatusCode.Accepted)
             {
                 var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
                 response.ValiDateZatcaResponse();
