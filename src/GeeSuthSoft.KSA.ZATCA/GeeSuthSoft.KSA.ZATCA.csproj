@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Version>8.5.0</Version>
@@ -11,6 +12,37 @@
     <Description>An Unofficial Library, This Library will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia</Description>
     <RepositoryUrl>https://github.com/GeeSuth/GeeSuthSoft.KSA.ZATCA</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+	<PackageReference Include="System.Text.Json" Version="6.0.0" />
+  </ItemGroup>
+
+	<!-- netstandard2.0 → for .NET Framework 4.x consumers -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="Microsoft.Extensions.Http"                            Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection"             Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging"                         Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions"            Version="6.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+	</ItemGroup>
+
+	<!-- net8.0 → for modern consumers -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.Extensions.Http"                            Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection"             Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging"                         Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions"            Version="8.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+	</ItemGroup>
   
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
@@ -29,13 +61,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-    <PackageReference Include="QRCoder" Version="1.4.2" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+	  <PackageReference Include="QRCoder" Version="1.4.2" />
   </ItemGroup>
 	<ItemGroup>
 		<InternalsVisibleTo Include="GeeSuthSoft.KSA.ZATCA.XunitTest"/>

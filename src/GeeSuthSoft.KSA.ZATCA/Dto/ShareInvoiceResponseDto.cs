@@ -31,9 +31,9 @@ public class InfoMessages
 
 public class ShareInvoiceRequestDto
 {
-    public required Invoice invoiceObject { get; set; } 
+    public Invoice invoiceObject { get; set; } = null!;
     public bool IsClearance { get; set; }
-    public required PCSIDInfoDto tokens { get; set; }
+    public PCSIDInfoDto tokens { get; set; } = null!;
     
 }
 

@@ -18,7 +18,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Helper
         public InvoiceTypeCode(InvoiceType type, string subType)
         {
             string typeCode = ((int)type).ToString();
-            Name = (subType.Trim() + "0000000")[..7];
+            Name = (subType.Trim() + "0000000").Substring(0, 7);
             Value = typeCode;
         }
 

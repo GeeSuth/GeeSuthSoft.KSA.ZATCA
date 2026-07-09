@@ -61,7 +61,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Dto
                 {
                     errors.Add("Invalid organization identifier, organization identifier should start with digit 3");
                 }
-                if (OrganizationIdentifier[^1] != '3')
+                if (OrganizationIdentifier[OrganizationIdentifier.Length - 1] != '3')
                 {
                     errors.Add("Invalid organization identifier, organization identifier should end with digit 3");
                 }

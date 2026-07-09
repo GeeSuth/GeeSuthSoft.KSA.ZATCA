@@ -11,10 +11,16 @@ using Microsoft.Extensions.Logging;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services;
 
-public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
-    IZatcaApiConfig zatcaApiConfig,
-    ILogger<ZatcaOnboardingService> logger) : LoggerHelper(zatcaApiConfig , logger: logger) , IZatcaShareService
+public class ZatcaShareService : LoggerHelper, IZatcaShareService
 {
+    private readonly IZatcaInvoiceService _zatcaInvoiceService;
+
+    public ZatcaShareService(IZatcaInvoiceService zatcaInvoiceService,
+        IZatcaApiConfig zatcaApiConfig,
+        ILogger<ZatcaOnboardingService> logger) : base(zatcaApiConfig, logger)
+    {
+        _zatcaInvoiceService = zatcaInvoiceService;
+    }
     
     public async ValueTask<ShareInvoiceResponseDto> ShareInvoiceWithZatcaAsync(ShareInvoiceRequestDto shareInvoiceRequestDto)
     {
@@ -81,17 +87,22 @@ public class ZatcaShareService(IZatcaInvoiceService _zatcaInvoiceService,
 
 
             LogZatcaInfo($"Sharing Invoice Response Status: {result.StatusCode}");
-            if (result.StatusCode != HttpStatusCode.OK)
+            if (result.StatusCode == HttpStatusCode.OK || result.StatusCode == HttpStatusCode.Accepted)
             {
-                LogZatcaInfo($"Sharing Invoice Id: {zatcaRequestApi.uuid} Response Not 200_OK Error Response : {await result.Content.ReadAsStringAsync()}");
+                var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
+                response.ValiDateZatcaResponse();
+                return response;
+
+            }
+            else if(result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new GeeSuthSoftZatcaUnauthorizedException("Please renew the credentials");
             }
 
-            //result.EnsureSuccessStatusCode();
+            var responseStr = await result.Content.ReadAsStringAsync();
+            LogZatcaInfo($"Sharing Invoice Id: {zatcaRequestApi.uuid} Response Not 200_OK Error Response : {responseStr}");
 
-            var response = await result.Content.ReadFromJsonAsync<ShareInvoiceResponseDto>();
-            response.ValiDateZatcaResponse();
-
-            return response;
+            throw new GeeSuthSoftZatcaUnExpectedException(responseStr);
         }
         catch (Exception ex)
         {

@@ -81,7 +81,7 @@ public class ShareInvoiceZatcaTest(ServiceProviderFixture fixture) : IClassFixtu
         {
             invoiceObject = InvoicesTemplateTest.GetSimpleInvoice(),
             tokens = pcsidTokens,
-            IsClearance = true
+            IsClearance = false
         };
         var resultShare = await _zatcaShareService.ShareInvoiceWithZatcaAsync(shareInvoiceRequest);
         

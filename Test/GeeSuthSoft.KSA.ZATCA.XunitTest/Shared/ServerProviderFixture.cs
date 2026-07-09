@@ -15,7 +15,7 @@ namespace GeeSuthSoft.KSA.ZATCA.XunitTest.Shared
             services.AddZatca(options =>
             {
                 options.ZatcaBaseUrl = "https://gw-fatoora.zatca.gov.sa";
-                options.Environment = EnvironmentType.Production;
+                options.Environment = EnvironmentType.NonProduction;
                 options.LogRequestAndResponse = true;
             });
 

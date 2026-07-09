@@ -8,10 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace GeeSuthSoft.KSA.ZATCA.Services;
 
-public class ZatcaSignInvoiceService (ILogger<ZatcaInvoiceService> logger,
-     IZatcaApiConfig zatcaApiConfig) : 
-     LoggerHelper(zatcaApiConfig , logger: logger), IZatcaSignInvoiceService
+public class ZatcaSignInvoiceService : LoggerHelper, IZatcaSignInvoiceService
 {
+    public ZatcaSignInvoiceService(ILogger<ZatcaInvoiceService> logger,
+        IZatcaApiConfig zatcaApiConfig) : base(zatcaApiConfig, logger)
+    {
+    }
     public SignedInvoiceResult GetSignedInvoice(SignedInvoiceRequestDto InvoiceSign)
     {
         try
