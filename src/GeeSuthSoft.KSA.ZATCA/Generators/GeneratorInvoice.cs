@@ -89,6 +89,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
             string InvoiceNumber = new string(InvoiceObject.ID.Value.ToString().Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c).ToArray());
 
             result.XmlFileName = $"{SellerIdentification}_{IssueDate}{IssueTime}_{InvoiceNumber}.xml";
+            result.XmlContent = CleanInvoice;
 
             return result;
         }
