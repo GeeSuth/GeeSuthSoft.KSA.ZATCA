@@ -9,6 +9,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Dto
         public ContentQR Base64QrCodeContent { get; set; }= new ContentQR();
         public string XmlFileName { get; set; }= null!;
         public ZatcaRequestApi RequestApi { get; set; } = null!;
+        public string XmlContent { get; set; } = null!;
 
     }
 
