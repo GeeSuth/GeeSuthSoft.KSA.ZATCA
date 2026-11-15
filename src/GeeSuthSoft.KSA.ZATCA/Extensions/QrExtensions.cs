@@ -1,17 +1,23 @@
-
-using System.Drawing;
-using System.Runtime.CompilerServices;
 using GeeSuthSoft.KSA.ZATCA.Dto;
-using GeeSuthSoft.KSA.ZATCA.Helper;
 using GeeSuthSoft.KSA.ZATCA.QR;
 
 namespace GeeSuthSoft.KSA.ZATCA.Extensions;
 
 public static class QrExtensions
 {
+    /// <summary>
+    /// return the QR of invoice as a base64 encoded PNG image.
+    /// </summary>
+    /// <param name="contentQR"></param>
+    /// <returns></returns>
     public static string GenerateURLImage(this ContentQR contentQR)
     {
-        return new QR.QrCodeGenerate().Generate(contentQR.Base64QrCodeContent);
+        if (contentQR == null)
+        {
+            throw new ArgumentNullException(nameof(contentQR));
+        }
+
+        return new QrCodeGenerate().Generate(contentQR.Base64QrCodeContent);
     }
 
     /// <summary>
@@ -25,4 +31,3 @@ public static class QrExtensions
     }
 
 }
-

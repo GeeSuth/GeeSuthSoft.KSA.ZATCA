@@ -13,6 +13,10 @@ GeeSuthSoft.KSA.ZATCA is a .NET library that helps developers integrate with ZAT
 - Share and validate e-invoices with ZATCA
 - Support Production and Non-Production , Simulation environments
 - Built for .NET 7+
+- Cross-platform QR image generation (managed PNG, works on Linux/Docker)
+
+> **QR images:** QR images are generated with managed code (PNG) and work on Linux/Docker;
+> center-image (`QrCodeOption.CenterImage`) and `Qr.GetImage` remain Windows-only.
 
 ## Installation
 Install via NuGet Package Manager:
@@ -121,6 +125,30 @@ var shareRequest = new ShareInvoiceRequestDto {
 };
 var shareResponse = await shareService.ShareInvoiceWithZatcaAsync(shareRequest);
 ```
+
+### QR Code Images (Linux / Docker friendly)
+
+QR images are generated with QRCoder's managed `PngByteQRCode` writer, so they work on
+Linux/Docker without `libgdiplus` or `System.Drawing.EnableUnixSupport`.
+
+```csharp
+// base64 encoded PNG
+var base64Png = Qr.GetBase64(sellerName, vatNumber, receiptDate, vatAmount, totalWithVat);
+
+// directly usable in an <img src="...">
+var dataUrl = Qr.GetBase64InUrl(sellerName, vatNumber, receiptDate, vatAmount, totalWithVat);
+
+// raw bytes / stream (cross-platform)
+byte[] pngBytes = Qr.GetPngBytes(sellerName, vatNumber, receiptDate, vatAmount, totalWithVat);
+using Stream pngStream = Qr.GetPngStream(sellerName, vatNumber, receiptDate, vatAmount, totalWithVat);
+
+// or from a signed invoice
+var qrDataUrl = signedInvoice.Base64QrCodeContent.GenerateImageDirectOpenInBrowser();
+```
+
+> `QrCodeOption.CenterImage` and `Qr.GetImage` (which returns `System.Drawing.Bitmap`)
+> remain Windows-only. On other platforms they throw a clear `PlatformNotSupportedException`;
+> use `GetPngBytes` / `GetPngStream` instead.
 
 ### Constructing an Invoice
 
