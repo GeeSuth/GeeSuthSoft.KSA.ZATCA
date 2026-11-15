@@ -1,0 +1,32 @@
+name: Build and Test (Linux)
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  qr-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore ./Test/GeeSuthSoft.KSA.ZATCA.XunitTest/GeeSuthSoft.KSA.ZATCA.XunitTest.csproj
+
+      - name: Build library (netstandard2.0 + net8.0)
+        run: dotnet build ./src/GeeSuthSoft.KSA.ZATCA/GeeSuthSoft.KSA.ZATCA.csproj --configuration Release
+
+      - name: Run QR image tests on Linux
+        run: >
+          dotnet test ./Test/GeeSuthSoft.KSA.ZATCA.XunitTest/GeeSuthSoft.KSA.ZATCA.XunitTest.csproj
+          --configuration Release
+          --filter "FullyQualifiedName~QrImageCrossPlatformTest|FullyQualifiedName~GenerateQRTest"
+          --logger "console;verbosity=normal"

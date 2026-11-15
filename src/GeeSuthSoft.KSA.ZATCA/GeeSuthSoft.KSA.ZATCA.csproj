@@ -5,8 +5,8 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>9.0.0</Version>
-    <AssemblyVersion>9.0</AssemblyVersion>
+    <Version>2026.11.16</Version>
+    <AssemblyVersion>2026.11.16</AssemblyVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>GeeSuthSoft</Authors>
     <Description>An Unofficial Library, This Library will be have a tools to help programmers to new requirements from ZATCA In Saudi Arabia</Description>
@@ -25,6 +25,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging"                         Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions"            Version="6.0.0" />
+		<!-- Only needed by Windows-only features (Qr.GetImage / QrCodeOption.CenterImage); the default QR path is managed PNG. -->
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
@@ -38,6 +39,8 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging"                         Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions"            Version="8.0.0" />
+		<!-- System.Drawing.Common 8.x is Windows-only and is only used by Qr.GetImage / QrCodeOption.CenterImage.
+		     The default QR generation path uses QRCoder's managed PngByteQRCode and does not touch GDI+. -->
 		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
 		<PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />

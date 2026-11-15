@@ -21,6 +21,10 @@ namespace GeeSuthSoft.KSA.ZATCA.QR
         public string BackgroundColor { get; set; } = "#FFFFFF";
         public bool DrawQuietZones { get; set; } = true;
 
+        /// <summary>
+        /// Optional image to draw in the center of the QR code.
+        /// Center images are rendered with System.Drawing (GDI+) and are only supported on Windows.
+        /// </summary>
         public Bitmap? CenterImage { get; set; }
         public int IconSizePercent { get; set; } = 30;
         public int IconBorderWidth { get; set; } = 6;
