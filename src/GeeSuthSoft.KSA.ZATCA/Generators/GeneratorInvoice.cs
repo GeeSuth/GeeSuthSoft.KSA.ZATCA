@@ -32,7 +32,7 @@ namespace GeeSuthSoft.KSA.ZATCA.Generators
             //if (InvoiceObject.InvoiceTypeCode.Name.StartsWith("02"))
             //{
 
-                byte[] certificateBytes = Encoding.UTF8.GetBytes(X509CertificateContent);
+                byte[] certificateBytes = Convert.FromBase64String(X509CertificateContent);
                 X509Certificate2 parsedCertificate = new(certificateBytes);
 
                 string SignatureTimestamp = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss");
